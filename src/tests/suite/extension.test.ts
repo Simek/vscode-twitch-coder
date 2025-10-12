@@ -20,7 +20,6 @@ type IConfiguration = {
 
 export type EnumIndexer = Record<string, string>;
 
-// Defines a Mocha test suite to group tests of similar kind together
 suite('Extension Tests', function () {
   let extension: vscode.Extension<any>;
 

@@ -11,12 +11,6 @@ type ParserTestCase = {
   comment?: string;
 };
 
-suite('My Extension Suite', () => {
-  test('it should do something', async () => {
-    assert.strictEqual(1 + 1, 2);
-  });
-});
-
 suite('Utils Tests', function () {
   test('should return -1 when the value is not present', function () {
     assert.equal([1, 2, 3].indexOf(4), -1);
