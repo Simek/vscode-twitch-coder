@@ -17,38 +17,26 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
       - run: bun install
-      - if: runner.os == 'Linux'
-        name: Run tests
+      - name: Run tests
         shell: bash
         run: |
           set +e
-          xvfb-run -a bun vscode:test
+
+          if [[ "$RUNNER_OS" == "Linux" ]]; then
+            CMD="xvfb-run -a bun vscode:test"
+          else
+            CMD="bun vscode:test"
+          fi
+
+          eval "$CMD"
           EXIT_CODE=$?
 
           echo "🔍 VSCode test runner exit code: $EXIT_CODE"
 
           if [ $EXIT_CODE -eq 0 ]; then
-            echo "✅  Tests passed!"
+            echo "✅ Tests passed!"
             exit 0
           else
-            echo "❌  Tests failed (exit $EXIT_CODE)"
+            echo "❌ Tests failed (exit $EXIT_CODE)"
             exit $EXIT_CODE
           fi
-      - if: runner.os != 'Linux'
-        name: Run tests
-        shell: bash
-        run: |
-          set +e
-          bun vscode:test
-          EXIT_CODE=$?
-
-          echo "🔍 VSCode test runner exit code: $EXIT_CODE"
-
-          if [ $EXIT_CODE -eq 0 ]; then
-            echo "✅  Tests passed!"
-            exit 0
-          else
-            echo "❌  Tests failed (exit $EXIT_CODE)"
-            exit $EXIT_CODE
-          fi
-        
