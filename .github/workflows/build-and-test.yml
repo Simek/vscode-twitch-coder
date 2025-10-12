@@ -21,7 +21,7 @@ jobs:
         name: Run tests
         run: |
           set +e
-          bun vscode:test
+          xvfb-run -a bun vscode:test
           EXIT_CODE=$?
 
           echo "🔍 VSCode test runner exit code: $EXIT_CODE"
@@ -35,5 +35,18 @@ jobs:
           fi
       - if: runner.os != 'Linux'
         name: Run tests
-        run: bun vscode:test
+        run: |
+          set +e
+          bun vscode:test
+          EXIT_CODE=$?
+
+          echo "🔍 VSCode test runner exit code: $EXIT_CODE"
+
+          if [ $EXIT_CODE -eq 0 ]; then
+            echo "✅  Tests passed!"
+            exit 0
+          else
+            echo "❌  Tests failed (exit $EXIT_CODE)"
+            exit $EXIT_CODE
+          fi
         
