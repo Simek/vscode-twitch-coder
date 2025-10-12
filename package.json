@@ -1,0 +1,286 @@
+{
+  "name": "vscode-twitch-coder",
+  "displayName": "Twitch Coder",
+  "description": "Allow viewers to interact with your VS Code editor.",
+  "version": "0.1.0",
+  "preview": false,
+  "publisher": "simek",
+  "engines": {
+    "vscode": "^1.104.0"
+  },
+  "icon": "resources/twitch-coder-icon.png",
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "*"
+  ],
+  "repository": "github:Simek/vscode-twitch-coder",
+  "license": "MIT",
+  "main": "./out/extension.js",
+  "scripts": {
+    "vscode:prepublish": "bun compile",
+    "vscode:publish": "bun vsce publish --allow-star-activation",
+    "vscode:test": "bun vscode-test",
+    "vscode:test-prepare": "rimraf ./tests-out && tsc -p ./ --outDir ./tests-out",
+    "package": "bun vsce package --allow-star-activation",
+    "format": "bun prettier . --write --experimental-cli",
+    "compile": "copyfiles -au 1 ./src/**/*.html out/ && bun bundle",
+    "bundle": "rimraf ./out && tsc -p ./ --noEmit && esbuild src/extension.ts --outdir=out --format=cjs --platform=node --minify --external:vscode --bundle"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.1",
+    "tmi.js": "^1.8.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.10",
+    "@types/node-fetch": "2.6.13",
+    "@types/tmi.js": "^1.8.6",
+    "@types/vscode": "^1.104.0",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2",
+    "@vscode/vsce": "^3.6.2",
+    "copyfiles": "^2.3.0",
+    "esbuild": "^0.25.10",
+    "glob": "^11.0.3",
+    "prettier": "3.6.2",
+    "rimraf": "^6.0.1",
+    "typescript": "5.9.3"
+  },
+  "optionalDependencies": {
+    "keytar": "^7.9.0"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "twitchCoder.refreshTreeView",
+        "title": "Refresh"
+      },
+      {
+        "command": "twitchCoder.highlight",
+        "title": "Highlight Line",
+        "category": "Twitch Coder"
+      },
+      {
+        "command": "twitchCoder.unhighlight",
+        "title": "Remove Highlight"
+      },
+      {
+        "command": "twitchCoder.unhighlightSpecific",
+        "title": "Unhighlight by File and Line",
+        "category": "Twitch Coder"
+      },
+      {
+        "command": "twitchCoder.unhighlightAll",
+        "title": "Remove All Highlights",
+        "category": "Twitch Coder"
+      },
+      {
+        "command": "twitchCoder.gotoHighlight",
+        "title": "Goto Highlight"
+      },
+      {
+        "command": "twitchCoder.requestHighlight",
+        "title": "Request a Highlight from the Twitch Chat Client",
+        "category": "Twitch Coder"
+      },
+      {
+        "command": "twitchCoder.requestUnhighlight",
+        "title": "Request an Unhighlight from the Twitch Chat Client",
+        "category": "Twitch Coder"
+      },
+      {
+        "command": "twitchCoder.requestUnhighlightAll",
+        "title": "Request to unhighlight all highlights requested by the Twitch Chat Client",
+        "category": "Twitch Coder"
+      },
+      {
+        "command": "twitchCoder.signIn",
+        "title": "Sign-in to Twitch",
+        "category": "Twitch Coder"
+      },
+      {
+        "command": "twitchCoder.signOut",
+        "title": "Sign-out of Twitch",
+        "category": "Twitch Coder"
+      },
+      {
+        "command": "twitchCoder.connect",
+        "title": "Start Listening to Chat",
+        "category": "Twitch Coder"
+      },
+      {
+        "command": "twitchCoder.disconnect",
+        "title": "Stop Listening to Chat",
+        "category": "Twitch Coder"
+      },
+      {
+        "command": "twitchCoder.context.unhighlight",
+        "title": "Remove Highlight",
+        "category": "Twitch Coder"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "twitchCoder.refreshTreeView",
+          "when": "false"
+        },
+        {
+          "command": "twitchCoder.unhighlight",
+          "when": "false"
+        },
+        {
+          "command": "twitchCoder.gotoHighlight",
+          "when": "false"
+        },
+        {
+          "command": "twitchCoder.requestHighlight",
+          "when": "false"
+        },
+        {
+          "command": "twitchCoder.requestUnhighlight",
+          "when": "false"
+        },
+        {
+          "command": "twitchCoder.requestUnhighlightAll",
+          "when": "false"
+        },
+        {
+          "command": "twitchCoder.context.unhighlight",
+          "when": "false"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "twitchCoder.refreshTreeView",
+          "when": "view == twitchCoderTreeView || view == twitchCoderTreeView-explorer || view == twitchCoderTreeView-debug",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "twitchCoder.unhighlight",
+          "when": "view == twitchCoderTreeView || view == twitchCoderTreeView-explorer || view == twitchCoderTreeView-debug",
+          "group": "edit"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "twitchCoder.context.unhighlight",
+          "group": "1_modification",
+          "when": "editorHasHighlights"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "twitchCoder.unhighlightAll",
+          "group": "3_open",
+          "when": "editorHasHighlights"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "twitchCoder-explorer",
+          "icon": "resources/highlighterIcon.svg",
+          "title": "Twitch Coder"
+        }
+      ]
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "twitchCoderTreeView-explorer",
+          "name": "Highlights"
+        }
+      ],
+      "debug": [
+        {
+          "id": "twitchCoderTreeView-debug",
+          "name": "Highlights"
+        }
+      ],
+      "twitchCoder-explorer": [
+        {
+          "id": "twitchCoderTreeView",
+          "name": "Highlights",
+          "when": "config.twitchCoder.showHighlightsInActivityBar"
+        }
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "Twitch Coder",
+      "properties": {
+        "twitchCoder.channels": {
+          "type": "string",
+          "default": "",
+          "description": "A comma separated list of channel name(s) to connect to on Twitch. Example: 'clarkio', Another Example: 'clarkio, parithon'"
+        },
+        "twitchCoder.nickname": {
+          "type": "string",
+          "default": "",
+          "description": "The username the bot should use when joining a Twitch channel."
+        },
+        "twitchCoder.highlightColor": {
+          "type": "string",
+          "default": "rgba(169,112,255,0.8)",
+          "markdownDescription": "Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations. Example: green"
+        },
+        "twitchCoder.highlightFontColor": {
+          "type": "string",
+          "default": "white",
+          "markdownDescription": "Font color of the decoration. Use rgba() and define transparent background colors to play well with other decorations. Example: white"
+        },
+        "twitchCoder.highlightBorder": {
+          "type": "string",
+          "default": "1px solid #d7bdff",
+          "description": "CSS styling property that will be applied to text enclosed by a decoration."
+        },
+        "twitchCoder.announceBot": {
+          "title": "Twitch Coder",
+          "type": "boolean",
+          "default": true,
+          "description": "Whether or not the bot should announce its joining or leaving the chat room"
+        },
+        "twitchCoder.joinMessage": {
+          "type": "string",
+          "default": "Twitch Coder in the house!",
+          "description": "The message the bot will say when joining a chat room"
+        },
+        "twitchCoder.leaveMessage": {
+          "type": "string",
+          "default": "Twitch Coder has left the building!",
+          "description": "The message the bot will say when leaving a chat room"
+        },
+        "twitchCoder.requiredBadges": {
+          "type": "array",
+          "default": [],
+          "markdownDescription": "A list of badges required to use the highlighter command. The use must have at least one of these badges to use the command. Leave blank for no requirement. Example: moderator, subscriber, vip.",
+          "items": {
+            "type": "string",
+            "pattern": "(admin|bits|broadcaster|global_mod|moderator|subscriber|staff|turbo|premium|follower)*",
+            "errorMessage": "Expected one of the following: admin, bits, broadcaster, global_admin, moderator, subscriber, staff, turbo, premium, follower"
+          }
+        },
+        "twitchCoder.unhighlightOnDisconnect": {
+          "type": "boolean",
+          "default": false,
+          "description": "Unhighlight all lines when disconnected from the chat service."
+        },
+        "twitchCoder.showHighlightsInActivityBar": {
+          "type": "boolean",
+          "default": false,
+          "description": "Show the Highlights icon in the activity bar to display the tree view."
+        },
+        "twitchCoder.usageTip": {
+          "type": "string",
+          "default": "💡 To use the !line command, use the following format: !line <number> --or-- multiple lines: !line <start>-<end> --or-- with a comment: !line <number> <comment>",
+          "description": "A tip shared by the bot when a user chats: '!line'."
+        }
+      }
+    }
+  }
+}

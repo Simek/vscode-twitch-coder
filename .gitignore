@@ -1,0 +1,6 @@
+out
+node_modules
+tests-out
+.vscode-test/
+*.vsix
+.dccache

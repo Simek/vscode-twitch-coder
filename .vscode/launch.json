@@ -1,0 +1,52 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}"],
+      "outFiles": ["${workspaceFolder}/out/**/*.js"],
+      "preLaunchTask": "npm: compile"
+    },
+    {
+      "name": "Extension Disable Other Extensions",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": ["--extensionDevelopmentPath=${workspaceFolder}", "--disable-extensions"],
+      "outFiles": ["${workspaceFolder}/out/**/*.js"],
+      "preLaunchTask": "npm: compile"
+    },
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach to Server",
+      "port": 6009,
+      "timeout": 10000,
+      "restart": true,
+      "outFiles": ["${workspaceRoot}/out/**/*.js"]
+    },
+    {
+      "name": "Extension Tests",
+      "type": "extensionHost",
+      "request": "launch",
+      "runtimeExecutable": "${execPath}",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}",
+        "--extensionTestsPath=${workspaceFolder}/tests-out/tests/suite/index.js",
+        "--disable-extensions"
+      ],
+      "testConfiguration": "${workspaceFolder}/.vscode-test.mjs",
+      "outFiles": ["${workspaceFolder}/tests-out/tests/**/*.test.js"],
+      "preLaunchTask": "npm: vscode:test-prepare"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Extension + LSP",
+      "configurations": ["Attach to Server", "Extension"]
+    }
+  ]
+}

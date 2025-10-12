@@ -1,0 +1,16 @@
+export enum Commands {
+  'refreshTreeView' = 'twitchCoder.refreshTreeView',
+  'highlight' = 'twitchCoder.highlight',
+  'unhighlight' = 'twitchCoder.unhighlight',
+  'unhighlightSpecific' = 'twitchCoder.unhighlightSpecific',
+  'unhighlightAll' = 'twitchCoder.unhighlightAll',
+  'gotoHighlight' = 'twitchCoder.gotoHighlight',
+  'requestHighlight' = 'twitchCoder.requestHighlight',
+  'requestUnhighlight' = 'twitchCoder.requestUnhighlight',
+  'requestUnhighlightAll' = 'twitchCoder.requestUnhighlightAll',
+  'signIn' = 'twitchCoder.signIn',
+  'signOut' = 'twitchCoder.signOut',
+  'connect' = 'twitchCoder.connect',
+  'disconnect' = 'twitchCoder.disconnect',
+  'contextMenuUnhighlight' = 'twitchCoder.context.unhighlight',
+}
