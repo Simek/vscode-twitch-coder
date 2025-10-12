@@ -19,6 +19,7 @@ jobs:
       - run: bun install
       - if: runner.os == 'Linux'
         name: Run tests
+        shell: bash
         run: |
           set +e
           xvfb-run -a bun vscode:test
@@ -35,6 +36,7 @@ jobs:
           fi
       - if: runner.os != 'Linux'
         name: Run tests
+        shell: bash
         run: |
           set +e
           bun vscode:test
