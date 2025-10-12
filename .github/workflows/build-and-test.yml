@@ -1,4 +1,4 @@
-name: 'Build and Test extension'
+name: 'Build and Test'
 
 on:
   pull_request:
@@ -17,4 +17,18 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
       - run: bun install
-      - run: bun vscode:test || true
+      - name: Run tests
+        run: |
+          set +e
+          bun vscode:test
+          EXIT_CODE=$?
+
+          echo "🔍  VSCode test runner exit code: $EXIT_CODE"
+
+          if [ $EXIT_CODE -eq 0 ]; then
+            echo "✅  Tests passed!"
+            exit 0
+          else
+            echo "❌  Tests failed (exit $EXIT_CODE)"
+            exit $EXIT_CODE
+          fi
