@@ -10,8 +10,6 @@
 
 A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos, etc. by sending a command in chat that will highlight the line of code they want you to check.
 
-Test
-
 ## 🔧 Requirements
 
 In order to use this extension you will need the following things before going to the [Getting Started](#getting-started) section.
