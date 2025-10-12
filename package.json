@@ -2,7 +2,7 @@
   "name": "vscode-twitch-coder",
   "displayName": "Twitch Coder",
   "description": "Allow viewers to interact with your VS Code editor.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "preview": false,
   "publisher": "simek",
   "engines": {
@@ -25,8 +25,8 @@
     "vscode:test-prepare": "rimraf ./tests-out && tsc -p ./ --outDir ./tests-out",
     "package": "bun vsce package --allow-star-activation",
     "format": "bun prettier . --write --experimental-cli",
-    "compile": "copyfiles -au 1 ./src/**/*.html out/ && bun bundle",
-    "bundle": "rimraf ./out && tsc -p ./ --noEmit && esbuild src/extension.ts --outdir=out --format=cjs --platform=node --minify --external:vscode --bundle"
+    "compile": "rimraf ./out && tsc -p ./ --noEmit && copyfiles -au 1 ./src/**/*.html out/ && bun bundle",
+    "bundle": "esbuild src/extension.ts --outdir=out --format=cjs --platform=node --minify --external:vscode --bundle"
   },
   "dependencies": {
     "node-fetch": "^2.6.1",

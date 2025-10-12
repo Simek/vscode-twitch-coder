@@ -6,16 +6,26 @@ import * as assert from 'assert';
 import { suite, test, setup } from 'mocha';
 import * as vscode from 'vscode';
 
-type ICommand = {
+type Command = {
   title: string;
   command: string;
   category: string;
 };
 
-type IConfiguration = {
+type ConfigurationProperty = {
+  type: string | string[];
+  default?: any;
+  description?: string;
+  enum?: string[];
+  enumDescriptions?: string[];
+  deprecationMessage?: string;
+  markdownDescription?: string;
+};
+
+type Configuration = {
   type: string;
   title: string;
-  properties: any;
+  properties: Record<string, ConfigurationProperty>;
 };
 
 export type EnumIndexer = Record<string, string>;
@@ -46,7 +56,7 @@ suite('Extension Tests', function () {
   });
 
   test('constants.Commands exist in package.json', function () {
-    const commandCollection: ICommand[] = extension.packageJSON.contributes.commands;
+    const commandCollection: Command[] = extension.packageJSON.contributes.commands;
     for (let command in Commands) {
       const result = commandCollection.some((c) => c.command === (Commands as any)[command]);
       assert.ok(result);
@@ -54,7 +64,7 @@ suite('Extension Tests', function () {
   });
 
   test('constants.Settings exist in package.json', function () {
-    const config: IConfiguration = extension.packageJSON.contributes.configuration;
+    const config: Configuration = extension.packageJSON.contributes.configuration;
     const properties = Object.keys(config.properties);
     for (let setting in Settings) {
       const result = properties.some((property) => property === `${extSuffix}.${(Settings as any)[setting]}`);
@@ -63,7 +73,7 @@ suite('Extension Tests', function () {
   });
 
   test('package.json commands registered in extension', function (done) {
-    const commandStrings: string[] = extension.packageJSON.contributes.commands.map((c: ICommand) => c.command);
+    const commandStrings: string[] = extension.packageJSON.contributes.commands.map((c: Command) => c.command);
 
     vscode.commands.getCommands(true).then((allCommands: string[]) => {
       const commands: string[] = allCommands.filter((c) => c.startsWith(`${extSuffix}.`));

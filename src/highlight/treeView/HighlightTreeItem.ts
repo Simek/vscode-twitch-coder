@@ -5,11 +5,11 @@ import { Commands } from '../../enums';
 
 export class HighlightTreeItem extends TreeItem {
   constructor(
-    public readonly label: string,
+    public override readonly label: string,
     public readonly fileName: string,
     public readonly highlights: Highlight[] = [],
-    public readonly collapsibleState: TreeItemCollapsibleState,
-    public readonly command?: Command
+    public override readonly collapsibleState: TreeItemCollapsibleState,
+    public override readonly command?: Command
   ) {
     super(label, collapsibleState);
   }
@@ -23,7 +23,7 @@ export class HighlightTreeItem extends TreeItem {
   }
 
   public get HighlightTreeItems(): HighlightTreeItem[] {
-    const children = new Array<HighlightTreeItem>();
+    const children: HighlightTreeItem[] = [];
     this.highlights.forEach((highlight) => {
       const label = `Line: ${highlight.endLine > highlight.startLine ? `${highlight.startLine} - ${highlight.endLine}` : `${highlight.startLine}`}`;
       const existingItem = children.find((item) => item.label === label);
@@ -41,5 +41,5 @@ export class HighlightTreeItem extends TreeItem {
     return children;
   }
 
-  contextValue = 'highlightTreeItem';
+  override contextValue = 'highlightTreeItem';
 }

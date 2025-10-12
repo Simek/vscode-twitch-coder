@@ -13,15 +13,14 @@ import { Configuration, SecretKeys, LogLevel, Settings } from '../enums';
 import { log } from '../logger';
 import { API } from './api/API';
 
-interface IBadges extends Badges {
-  [key: string]: string | undefined;
+type BadgesType = Badges & {
   follower: string;
-}
+} & Record<string, string | undefined>;
 
-export interface ChatClientMessageReceivedEvent {
+export type ChatClientMessageReceivedEvent = {
   userState: ChatUserstate;
   message: string;
-}
+};
 
 export class ChatClient implements Disposable {
   private readonly _onChatClientConnected: EventEmitter<boolean> = new EventEmitter();
@@ -73,6 +72,7 @@ export class ChatClient implements Disposable {
         return status;
       }
     }
+    return undefined;
   }
 
   public async disconnect() {
@@ -124,7 +124,7 @@ export class ChatClient implements Disposable {
       return;
     }
 
-    const badges = (userState.badges as IBadges) || {};
+    const badges = (userState.badges as BadgesType) || {};
     badges.follower = (await API.isUserFollowingChannel(userState.id!, channel)) === true ? '1' : '0';
 
     if (this.requiredBadges.length > 0 && !badges.broadcaster) {
@@ -143,7 +143,6 @@ export class ChatClient implements Disposable {
     message = message.toLocaleLowerCase().trim();
 
     if (message.startsWith('!line') || message.startsWith('!highlight')) {
-      // message = message.replace('!line', '').replace('!highlight', '').trim();
       if (message.length === 0) {
         this.sendMessage(
           '💡 To use the !line command, use the following format: !line <number> --or-- multiple lines: !line <start>-<end> --or-- with a comment: !line <number> <comment>'

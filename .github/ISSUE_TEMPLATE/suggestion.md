@@ -1,5 +1,5 @@
 ---
-name: Suggestion
+name: ✨ Suggestion
 about: Have an idea for a feature or a suggestion? Share it with us!
 title: ''
 labels: 'suggestion'

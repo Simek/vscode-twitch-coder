@@ -17,8 +17,7 @@ export class HighlightTreeDataProvider implements TreeDataProvider<HighlightTree
   }
 
   public refresh(): void {
-    // @ts-ignore
-    this._onDidChangeTreeData.fire();
+    this._onDidChangeTreeData.fire(undefined);
   }
 
   public getTreeItem(element: HighlightTreeItem): TreeItem {
@@ -31,7 +30,7 @@ export class HighlightTreeDataProvider implements TreeDataProvider<HighlightTree
         element.HighlightTreeItems.sort((highlightA, highlightB) => naturalCompare(highlightA.label, highlightB.label))
       );
     }
-    let highlightTreeItems = new Array<HighlightTreeItem>();
+    let highlightTreeItems: HighlightTreeItem[] = [];
     const currentHighlightCollections = this.getHighlightCollections().filter((hc) => hc.highlights.length > 0);
     currentHighlightCollections.forEach((hc) => {
       const highlights = hc.highlights;

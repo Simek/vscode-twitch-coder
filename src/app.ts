@@ -10,6 +10,7 @@ export class App implements vscode.Disposable {
   private log: log;
   private highlightDecorationType: vscode.TextEditorDecorationType;
   private currentDocument?: vscode.TextDocument;
+  // @ts-expect-error Not used yet
   private config?: vscode.WorkspaceConfiguration;
 
   constructor(outputChannel?: vscode.OutputChannel) {
@@ -28,7 +29,6 @@ export class App implements vscode.Disposable {
     context.subscriptions.push(
       this._highlightManager.onHighlightChanged(this.onHighlightChangedHandler, this),
 
-      // @ts-ignore
       vscode.window.onDidChangeVisibleTextEditors(this.onDidChangeVisibleTextEditorsHandler, this),
       vscode.window.onDidChangeActiveTextEditor(this.onDidChangeActiveTextEditorHandler, this),
 
@@ -96,7 +96,7 @@ export class App implements vscode.Disposable {
     this.refresh();
   }
 
-  private onDidChangeVisibleTextEditorsHandler(editors: Array<vscode.TextEditor>): void {
+  private onDidChangeVisibleTextEditorsHandler(editors: readonly vscode.TextEditor[]): any {
     if (editors.length > 0) {
       editors.forEach((te) => {
         te.setDecorations(this.highlightDecorationType, this._highlightManager.GetDecorations(te.document.fileName));
@@ -220,7 +220,7 @@ export class App implements vscode.Disposable {
       return;
     }
 
-    let pickerOptions: Array<string> = new Array<string>();
+    let pickerOptions: string[] = [];
     const highlights = this._highlightManager.GetHighlightDetails();
     highlights.forEach((highlight) => {
       pickerOptions = [...pickerOptions, highlight];

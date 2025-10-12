@@ -10,22 +10,22 @@ import {
 
 import { Highlight } from './Highlight';
 
-export interface HighlightCollection {
+export type HighlightCollection = {
   fileName: string;
-  highlights: Array<Highlight>;
-}
+  highlights: Highlight[];
+};
 
-export interface HighlightChangedEvent {}
+export type HighlightChangedEvent = {};
 
 export class HighlightManager {
   private readonly _onHighlightsChanged: EventEmitter<HighlightChangedEvent> = new EventEmitter();
-  private highlightCollection: Array<HighlightCollection> = [];
+  private highlightCollection: HighlightCollection[] = [];
 
   public get onHighlightChanged(): Event<HighlightChangedEvent> {
     return this._onHighlightsChanged.event;
   }
 
-  public GetHighlightCollection(): Array<HighlightCollection> {
+  public GetHighlightCollection(): HighlightCollection[] {
     return this.highlightCollection;
   }
 
@@ -87,8 +87,7 @@ export class HighlightManager {
         });
       }
 
-      // @ts-ignore
-      this._onHighlightsChanged.fire();
+      this._onHighlightsChanged.fire({});
       resolve();
     });
   }
@@ -116,8 +115,7 @@ export class HighlightManager {
           this.highlightCollection[idx].highlights.splice(hidx, 1);
         }
         if (!deferRefresh) {
-          // @ts-ignore
-          this._onHighlightsChanged.fire();
+          this._onHighlightsChanged.fire({});
         }
       }
       resolve();
@@ -125,12 +123,11 @@ export class HighlightManager {
   }
 
   public Refresh() {
-    // @ts-ignore
-    this._onHighlightsChanged.fire();
+    this._onHighlightsChanged.fire({});
   }
 
   public Clear(service?: string): Promise<void> {
-    return new Promise<void>((resolve) => {
+    return new Promise<void>(() => {
       if (service) {
         this.highlightCollection.forEach((hc) => {
           const highlightsToRemove = hc.highlights.filter((h) => h.userName.indexOf(`${service}:`) > -1);
@@ -139,10 +136,9 @@ export class HighlightManager {
           });
         });
       } else {
-        this.highlightCollection = new Array<HighlightCollection>();
+        this.highlightCollection = [];
       }
-      // @ts-ignore
-      this._onHighlightsChanged.fire();
+      this._onHighlightsChanged.fire({});
     });
   }
 
@@ -233,8 +229,7 @@ export class HighlightManager {
       }
     }
     if (updated) {
-      // @ts-ignore
-      this._onHighlightsChanged.fire();
+      this._onHighlightsChanged.fire({});
     }
   }
 }

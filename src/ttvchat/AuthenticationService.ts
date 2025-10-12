@@ -21,7 +21,6 @@ export class AuthenticationService {
     const userLogin = await CredentialManager.getSecret(SecretKeys.userLogin);
 
     if (accessToken && userLogin) {
-      // Twitch access tokens should be validated on a recurring interval.
       await this.validateToken(accessToken);
       return;
     }
@@ -87,12 +86,16 @@ export class AuthenticationService {
     const file = readFileSync(filePath);
     if (file) {
       const server = http.createServer(async (req: any, res: any) => {
-        const { path, query } = Uri.parse(req.url!, true);
+        const url = new URL(req.url, `http://localhost:${this.port}`);
+
+        console.warn(req.url, url.toString());
+        const { path, query } = Uri.parse(url.toString(), true);
         const queryParmas = new URLSearchParams(query);
 
-        if (path === '/') {
+        if (req.url === '/') {
           res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
           res.end(file);
+          return;
         } else if (path === '/oauth') {
           const accessToken = queryParmas.get('access_token');
 

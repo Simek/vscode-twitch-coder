@@ -2,14 +2,24 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es2024",
-    "outDir": "out-tests",
+    "outDir": "tests-out",
     "lib": ["es2024"],
     "sourceMap": false,
     "rootDirs": ["src"],
-    "strict": true,
     "skipLibCheck": true,
     "typeRoots": ["node_modules/@types"],
-    "types": ["node", "mocha"]
+    "types": ["node", "mocha"],
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noPropertyAccessFromIndexSignature": true
   },
   "exclude": ["node_modules", ".vscode-test", "out", "tests-out"]
 }
