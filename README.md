@@ -61,7 +61,13 @@ To highlight multiple lines, use the same syntax as above but include a range of
 Additionally, you can also include comments:
 
 ```
-!line <LineNumber> This is a comment
+!line <LineNumber> This is a test comment
+```
+
+Or highlight the line in one of opened tabs, which is not in active (it also works with comment and line ranges):
+
+```
+!line <LineNumber> <FileName> This is a test comment
 ```
 
 ## ⚙️ Extension Settings
