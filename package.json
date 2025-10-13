@@ -217,27 +217,27 @@
         "twitchCoder.channels": {
           "type": "string",
           "default": "",
-          "description": "A comma separated list of channel name(s) to connect to on Twitch. Example: 'clarkio', Another Example: 'clarkio, parithon'"
+          "description": "A comma separated list of channel name(s) to connect to on Twitch. Example: `simek` or for multiple channels: `simek, dev_spajus`"
+        },
+        "twitchCoder.highlightColor": {
+          "type": "string",
+          "default": "rgba(169,112,255,0.8)",
+          "markdownDescription": "Background color of the decoration. Use `rgba()` and define transparent background colors to play well with other decorations. Example: `rgba(169,112,255,0.8)`"
+        },
+        "twitchCoder.highlightFontColor": {
+          "type": "string",
+          "default": "#fff",
+          "markdownDescription": "Font color of the decoration. Use `rgba()` and define transparent background colors to play well with other decorations. Example: `white`"
+        },
+        "twitchCoder.highlightBorder": {
+          "type": "string",
+          "default": "1px solid #d7bdff",
+          "description": "CSS border styling property that will be applied to text enclosed by a decoration. Example: `1px solid #d7bdff`"
         },
         "twitchCoder.nickname": {
           "type": "string",
           "default": "",
           "description": "The username the bot should use when joining a Twitch channel."
-        },
-        "twitchCoder.highlightColor": {
-          "type": "string",
-          "default": "rgba(169,112,255,0.8)",
-          "markdownDescription": "Background color of the decoration. Use rgba() and define transparent background colors to play well with other decorations. Example: green"
-        },
-        "twitchCoder.highlightFontColor": {
-          "type": "string",
-          "default": "white",
-          "markdownDescription": "Font color of the decoration. Use rgba() and define transparent background colors to play well with other decorations. Example: white"
-        },
-        "twitchCoder.highlightBorder": {
-          "type": "string",
-          "default": "1px solid #d7bdff",
-          "description": "CSS styling property that will be applied to text enclosed by a decoration."
         },
         "twitchCoder.announceBot": {
           "title": "Twitch Coder",
@@ -262,7 +262,7 @@
           "items": {
             "type": "string",
             "pattern": "(admin|bits|broadcaster|global_mod|moderator|subscriber|staff|turbo|premium|follower)*",
-            "errorMessage": "Expected one of the following: admin, bits, broadcaster, global_admin, moderator, subscriber, staff, turbo, premium, follower"
+            "errorMessage": "Expected one of the following: `admin`, `bits`, `broadcaster`, `global_admin`, `moderator`, `subscriber`, `staff`, `turbo`, `premium` or `follower`."
           }
         },
         "twitchCoder.unhighlightOnDisconnect": {
@@ -278,7 +278,7 @@
         "twitchCoder.usageTip": {
           "type": "string",
           "default": "💡 To use the !line command, use the following format: !line <number> --or-- multiple lines: !line <start>-<end> --or-- with a comment: !line <number> <comment>",
-          "description": "A tip shared by the bot when a user chats: '!line'."
+          "description": "A tip shared by the bot when a user chats: `!line`."
         }
       }
     }

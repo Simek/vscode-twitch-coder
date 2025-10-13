@@ -16,7 +16,7 @@ export class TwitchChatService implements vscode.Disposable {
   private chatClient: ChatClient;
   private config?: vscode.WorkspaceConfiguration;
 
-  constructor(api: HighlighterAPI, outputChannel: vscode.OutputChannel) {
+  constructor(context: vscode.ExtensionContext, api: HighlighterAPI, outputChannel: vscode.OutputChannel) {
     this.log = new Logger(outputChannel).log;
     this.chatClient = new ChatClient(this.log);
     this.chatClient.disconnect.bind(this.chatClient);
@@ -33,9 +33,18 @@ export class TwitchChatService implements vscode.Disposable {
     this.loginStatusBarItem.tooltip = 'Twitch Coder Login';
 
     this.chatClientStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left);
-    this.chatClientStatusBarItem.text = `$(plug) Disconnected`;
     this.chatClientStatusBarItem.command = Commands.connect;
-    this.chatClientStatusBarItem.tooltip = 'Twitch Coder Chat Bot';
+
+    this.updateChatButtonState();
+
+    const didChangeConfiguration = vscode.workspace.onDidChangeConfiguration((event) => {
+      if (event.affectsConfiguration(`${Configuration.sectionIdentifier}.${Settings.channels}`)) {
+        this.config = vscode.workspace.getConfiguration(Configuration.sectionIdentifier);
+        this.updateChatButtonState();
+      }
+    });
+
+    context.subscriptions.push(didChangeConfiguration);
   }
 
   public async initialize(context: vscode.ExtensionContext): Promise<void> {
@@ -69,6 +78,20 @@ export class TwitchChatService implements vscode.Disposable {
     this.log('ttvchat initialized.');
   }
 
+  private updateChatButtonState() {
+    const channels = this.config?.get<string>(Settings.channels) ?? '';
+
+    if (channels.length === 0) {
+      this.chatClientStatusBarItem.text = '$(plug) Disconnected (not configured)';
+      this.chatClientStatusBarItem.tooltip =
+        'Twitch Coder channels are not configured. Please add at least one channel to connect.';
+      vscode.window.showWarningMessage('Twitch Coder: No channels configured, please add at least one channel.');
+    } else {
+      this.chatClientStatusBarItem.text = '$(plug) Disconnected';
+      this.chatClientStatusBarItem.tooltip = 'Twitch Coder is not connected to the chat room. Click to connect.';
+    }
+  }
+
   private onDidChangeConfigurationHandler(event: vscode.ConfigurationChangeEvent) {
     if (!event.affectsConfiguration(Configuration.sectionIdentifier)) {
       return;
@@ -93,9 +116,9 @@ export class TwitchChatService implements vscode.Disposable {
       this.chatClientStatusBarItem.command = Commands.disconnect;
       this.chatClientStatusBarItem.tooltip = 'Twitch Coder is connected to the chat room. Click to disconnect.';
     } else {
-      this.chatClientStatusBarItem.text = '$(plug) Disconnected';
       this.chatClientStatusBarItem.command = Commands.connect;
-      this.chatClientStatusBarItem.tooltip = 'Twitch Coder is not connected to the chat room. Click to connect.';
+      this.updateChatButtonState();
+
       const unhighlightOnDisconnect = this.config!.get<boolean>(Settings.unhighlightOnDisconnect) || false;
       if (unhighlightOnDisconnect) {
         this._api.requestUnhighlightAll('twitch');

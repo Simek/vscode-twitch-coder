@@ -1,5 +1,6 @@
 import { Badges, ChatUserstate, Client, Options } from 'tmi.js';
 import {
+  commands,
   ConfigurationChangeEvent,
   Disposable,
   Event,
@@ -7,6 +8,7 @@ import {
   ExtensionContext,
   workspace,
   WorkspaceConfiguration,
+  window,
 } from 'vscode';
 import CredentialManager from '../credentialManager';
 import { Configuration, SecretKeys, LogLevel, Settings } from '../enums';
@@ -55,7 +57,16 @@ export class ChatClient implements Disposable {
       const accessToken = await CredentialManager.getSecret(SecretKeys.account);
       const login = await CredentialManager.getSecret(SecretKeys.userLogin);
       if (accessToken && login) {
-        this.channel = this.config.get<string>(Settings.channels) || login;
+        const channel = this.config.get<string>(Settings.channels);
+
+        if (!channel || channel.length === 0) {
+          window.showWarningMessage('Twitch Coder: No channels configured, please add at least one channel.');
+          await commands.executeCommand('workbench.action.openSettings', Configuration.sectionIdentifier);
+          return undefined;
+        }
+
+        this.channel = channel;
+
         const opts: Options = {
           identity: {
             username: login,
@@ -63,10 +74,12 @@ export class ChatClient implements Disposable {
           },
           channels: this.channel.split(', ').map((c) => c.trim()),
         };
+
         this.client = Client(opts);
         this.client.on('connected', this.onConnectedHandler.bind(this));
         this.client.on('message', this.onMessageHandler.bind(this));
         this.client.on('join', this.onJoinHandler.bind(this));
+
         const status = await this.client.connect();
         this._onChatClientConnected.fire(true);
         return status;
@@ -157,6 +170,8 @@ export class ChatClient implements Disposable {
   }
 
   private async onDidChangeConfigurationHandler(event: ConfigurationChangeEvent) {
+    this.config = workspace.getConfiguration(Configuration.sectionIdentifier);
+
     if (event.affectsConfiguration(Configuration.sectionIdentifier) && this.isConnected) {
       await this.disconnect();
       await this.connect();

@@ -19,7 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
   const outputChannel = vscode.window.createOutputChannel('Twitch Coder');
 
   app = new App(outputChannel);
-  ttvchat = new TwitchChatService(app.API, outputChannel);
+  ttvchat = new TwitchChatService(context, app.API, outputChannel);
 
   app.intialize(context);
   ttvchat.initialize(context);
