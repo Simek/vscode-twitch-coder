@@ -1,5 +1,6 @@
 export enum Commands {
   'refreshTreeView' = 'twitchCoder.refreshTreeView',
+  'unhighlightAllTreeView' = 'twitchCoder.unhighlightAllTreeView',
   'highlight' = 'twitchCoder.highlight',
   'unhighlight' = 'twitchCoder.unhighlight',
   'unhighlightSpecific' = 'twitchCoder.unhighlightSpecific',

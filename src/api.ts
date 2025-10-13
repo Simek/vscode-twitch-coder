@@ -6,8 +6,16 @@ export type HighlighterAPI = {
    * @param startLine The start line used to highlight.
    * @param endLine The end line of the highlight (only if highlighting multiple lines).
    * @param comments The comment to add to the highlight.
+   * @param fileName The name of opend file to highlight. Defaults to currently active editor.
    */
-  requestHighlight(service: string, userName: string, startLine: number, endLine?: number, comments?: string): void;
+  requestHighlight(
+    service: string,
+    userName: string,
+    startLine: number,
+    endLine?: number,
+    comments?: string,
+    fileName?: string
+  ): void;
   /**
    * Call this function to request a highlight to be removed from the open, active text document.
    * @param service The name of the service making the request, for example: twitch.

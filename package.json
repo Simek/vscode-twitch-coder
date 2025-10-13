@@ -2,7 +2,7 @@
   "name": "vscode-twitch-coder",
   "displayName": "Twitch Coder",
   "description": "Allow viewers to interact with your VS Code editor.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "preview": false,
   "publisher": "simek",
   "engines": {
@@ -55,6 +55,10 @@
       {
         "command": "twitchCoder.refreshTreeView",
         "title": "Refresh"
+      },
+      {
+        "command": "twitchCoder.unhighlightAllTreeView",
+        "title": "Clear All"
       },
       {
         "command": "twitchCoder.highlight",
@@ -127,6 +131,10 @@
           "when": "false"
         },
         {
+          "command": "twitchCoder.unhighlightAllTreeView",
+          "when": "false"
+        },
+        {
           "command": "twitchCoder.unhighlight",
           "when": "false"
         },
@@ -152,6 +160,11 @@
         }
       ],
       "view/title": [
+        {
+          "command": "twitchCoder.unhighlightAllTreeView",
+          "when": "view == twitchCoderTreeView || view == twitchCoderTreeView-explorer || view == twitchCoderTreeView-debug",
+          "group": "navigation"
+        },
         {
           "command": "twitchCoder.refreshTreeView",
           "when": "view == twitchCoderTreeView || view == twitchCoderTreeView-explorer || view == twitchCoderTreeView-debug",

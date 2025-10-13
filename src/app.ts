@@ -3,6 +3,7 @@ import { HighlighterAPI } from './api';
 import { AppContexts, Commands, Configuration, LogLevel, Settings } from './enums';
 import { HighlightManager, HighlightTreeDataProvider, HighlightTreeItem } from './highlight';
 import { log, Logger } from './logger';
+import { parseMessage } from './utils';
 
 export class App implements vscode.Disposable {
   private readonly _highlightManager: HighlightManager;
@@ -40,6 +41,7 @@ export class App implements vscode.Disposable {
       vscode.window.registerTreeDataProvider('twitchCoderTreeView', this._highlightTreeDataProvider),
 
       vscode.commands.registerCommand(Commands.refreshTreeView, this.refreshTreeviewHandler, this),
+      vscode.commands.registerCommand(Commands.unhighlightAllTreeView, this.unhighlightAllHandler, this),
 
       vscode.commands.registerCommand(Commands.highlight, this.highlightHandler, this),
       vscode.commands.registerCommand(Commands.unhighlight, this.unhighlightHandler, this),
@@ -58,8 +60,23 @@ export class App implements vscode.Disposable {
   }
 
   public API: HighlighterAPI = {
-    requestHighlight(service: string, userName: string, startLine: number, endLine?: number, comments?: string) {
-      vscode.commands.executeCommand(Commands.requestHighlight, service, userName, startLine, endLine, comments);
+    requestHighlight(
+      service: string,
+      userName: string,
+      startLine: number,
+      endLine?: number,
+      comments?: string,
+      fileName?: string
+    ) {
+      vscode.commands.executeCommand(
+        Commands.requestHighlight,
+        service,
+        userName,
+        startLine,
+        endLine,
+        comments,
+        fileName
+      );
     },
     requestUnhighlight(service: string, userName: string, lineNumber: number) {
       vscode.commands.executeCommand(Commands.requestUnhighlight, service, userName, lineNumber);
@@ -166,22 +183,17 @@ export class App implements vscode.Disposable {
   }
 
   private async highlightHandler(): Promise<void> {
-    const editor = vscode.window.activeTextEditor;
-    if (!this.isActiveTextEditor) {
-      vscode.window.showInformationMessage(
-        'The current open, and active text editor is either empty or not a valid target to highlight a line.'
-      );
-      return;
-    }
-
     try {
       const options: vscode.InputBoxOptions = {
         ignoreFocusOut: true,
-        prompt: 'Enter a line number',
+        prompt: 'Enter a line number, line range, and optionally the file name of one of opened tabs.',
       };
       const value = await vscode.window.showInputBox(options);
       if (value) {
-        this._highlightManager.Add(editor!.document, 'self', +(value || 0));
+        const result = parseMessage(`!line ${value}`);
+        if (result) {
+          this.API.requestHighlight('self', 'me', result.startLine, result.endLine, result.comments, result.fileName);
+        }
       }
     } catch (err) {
       this.log(LogLevel.Error, err);
@@ -253,15 +265,45 @@ export class App implements vscode.Disposable {
     }
   }
 
-  private requestHighlightHandler(
+  private getAllOpenTabs() {
+    const tabs: vscode.Tab[] = [];
+
+    for (const group of vscode.window.tabGroups.all) {
+      tabs.push(...group.tabs);
+    }
+
+    return tabs;
+  }
+
+  private async requestHighlightHandler(
     service: string,
     userName: string,
     startLine: number,
     endLine?: number,
-    comments?: string
-  ): void {
-    const editor = vscode.window.activeTextEditor;
-    if (!this.isActiveTextEditor) {
+    comments?: string,
+    fileName?: string
+  ): Promise<void> {
+    let editor: vscode.TextEditor | undefined = undefined;
+
+    if (fileName) {
+      const tab = this.getAllOpenTabs().find((tab) => {
+        if (tab.input instanceof vscode.TabInputText) {
+          return tab.input.uri.fsPath.endsWith(fileName);
+        }
+        return false;
+      });
+
+      if (tab) {
+        if (tab.input instanceof vscode.TabInputText) {
+          await vscode.window.showTextDocument(tab.input.uri, { preserveFocus: false });
+          editor = vscode.window.activeTextEditor;
+        }
+      }
+    } else {
+      editor = vscode.window.activeTextEditor;
+    }
+
+    if (!editor) {
       this.log(LogLevel.Warning, `Could not highlight the line requested by ${service}:${userName}`);
       this.log(
         LogLevel.Warning,

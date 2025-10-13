@@ -88,7 +88,6 @@ export class AuthenticationService {
       const server = http.createServer(async (req: any, res: any) => {
         const url = new URL(req.url, `http://localhost:${this.port}`);
 
-        console.warn(req.url, url.toString());
         const { path, query } = Uri.parse(url.toString(), true);
         const queryParmas = new URLSearchParams(query);
 

@@ -131,7 +131,14 @@ export class TwitchChatService implements vscode.Disposable {
     const result = parseMessage(event.message);
     if (result) {
       if (result.highlight) {
-        this._api.requestHighlight('twitch', userName, result.startLine, result.endLine, result.comments);
+        this._api.requestHighlight(
+          'twitch',
+          userName,
+          result.startLine,
+          result.endLine,
+          result.comments,
+          result.fileName
+        );
       } else {
         this._api.requestUnhighlight('twitch', userName, result.startLine);
       }
