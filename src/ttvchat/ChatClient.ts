@@ -35,6 +35,7 @@ export class ChatClient implements Disposable {
   private config?: WorkspaceConfiguration;
   private client?: Client;
   private channel: string = '';
+  private autoConnect: boolean = false;
   private announceBot: boolean = true;
   private joinMessage: string = '';
   private leaveMessage: string = '';
@@ -44,10 +45,15 @@ export class ChatClient implements Disposable {
 
   public initialize(context: ExtensionContext) {
     this.config = workspace.getConfiguration(Configuration.sectionIdentifier);
+    this.autoConnect = this.config.get<boolean>(Settings.autoConnect) || false;
     this.announceBot = this.config.get<boolean>(Settings.announceBot) || true;
     this.joinMessage = this.config.get<string>(Settings.joinMessage) || '';
     this.leaveMessage = this.config.get<string>(Settings.leaveMessage) || '';
     this.requiredBadges = this.config.get<string[]>(Settings.requiredBadges) || [];
+
+    if (this.autoConnect) {
+      this.connect();
+    }
 
     context.subscriptions.push(workspace.onDidChangeConfiguration(this.onDidChangeConfigurationHandler, this));
   }

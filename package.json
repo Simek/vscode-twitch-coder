@@ -230,43 +230,48 @@
         "twitchCoder.channels": {
           "type": "string",
           "default": "",
-          "description": "A comma separated list of channel name(s) to connect to on Twitch. Example: `simek` or for multiple channels: `simek, dev_spajus`"
+          "description": "A comma separated list of channel name(s) to connect to on Twitch. Example: `simek` or for multiple channels: `simek, dev_spajus`."
         },
         "twitchCoder.highlightColor": {
           "type": "string",
           "default": "rgba(169,112,255,0.8)",
-          "markdownDescription": "Background color of the decoration. Use `rgba()` and define transparent background colors to play well with other decorations. Example: `rgba(169,112,255,0.8)`"
+          "markdownDescription": "Background color of the decoration. Use `rgba()` and define transparent background colors to play well with other decorations. Example: `rgba(169,112,255,0.8)`."
         },
         "twitchCoder.highlightFontColor": {
           "type": "string",
           "default": "#fff",
-          "markdownDescription": "Font color of the decoration. Use `rgba()` and define transparent background colors to play well with other decorations. Example: `white`"
+          "markdownDescription": "Font color of the decoration. Use `rgba()` and define transparent background colors to play well with other decorations. Example: `white`."
         },
         "twitchCoder.highlightBorder": {
           "type": "string",
           "default": "1px solid #d7bdff",
-          "description": "CSS border styling property that will be applied to text enclosed by a decoration. Example: `1px solid #d7bdff`"
+          "description": "CSS border styling property that will be applied to text enclosed by a decoration. Example: `1px solid #d7bdff`."
         },
         "twitchCoder.nickname": {
           "type": "string",
           "default": "",
-          "description": "The username the bot should use when joining a Twitch channel."
+          "description": "The username the chat bot should use when joining a Twitch channel."
+        },
+        "twitchCoder.autoConnect": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether or not the chat bot should try connecting automatically when VS Code starts."
         },
         "twitchCoder.announceBot": {
           "title": "Twitch Coder",
           "type": "boolean",
           "default": true,
-          "description": "Whether or not the bot should announce its joining or leaving the chat room"
+          "description": "Whether or not the chat bot should announce its joining or leaving the chat room."
         },
         "twitchCoder.joinMessage": {
           "type": "string",
           "default": "Twitch Coder in the house!",
-          "description": "The message the bot will say when joining a chat room"
+          "description": "The message the chat bot will say when joining a chat room."
         },
         "twitchCoder.leaveMessage": {
           "type": "string",
           "default": "Twitch Coder has left the building!",
-          "description": "The message the bot will say when leaving a chat room"
+          "description": "The message the chat bot will say when leaving a chat room."
         },
         "twitchCoder.requiredBadges": {
           "type": "array",

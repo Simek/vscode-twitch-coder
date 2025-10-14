@@ -4,6 +4,7 @@ export enum Settings {
   'highlightColor' = 'highlightColor',
   'highlightBorder' = 'highlightBorder',
   'highlightFontColor' = 'highlightFontColor',
+  'autoConnect' = 'autoConnect',
   'announceBot' = 'announceBot',
   'joinMessage' = 'joinMessage',
   'leaveMessage' = 'leaveMessage',
