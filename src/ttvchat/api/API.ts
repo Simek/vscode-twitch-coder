@@ -17,11 +17,8 @@ export class API {
       if (res.status !== 200) {
         return false;
       }
-      // you can inspect the JSON if you need to check for data.length > 0
-      // const json = await res.json();
       return true;
     } catch (err) {
-      // propagate network/parse errors
       throw err;
     }
   }

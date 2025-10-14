@@ -11,7 +11,6 @@ import { SecretKeys } from './enums';
 let app: App;
 let ttvchat: TwitchChatService;
 
-// this method is called when your extension is activated for the first time
 export function activate(context: vscode.ExtensionContext) {
   CredentialManager.setup(context);
   CredentialManager.deleteSecret(SecretKeys.twitchToken);

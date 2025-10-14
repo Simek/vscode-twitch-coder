@@ -4,3 +4,4 @@ tests-out
 .vscode-test/
 *.vsix
 .dccache
+.TODO.md

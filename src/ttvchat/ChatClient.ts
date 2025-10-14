@@ -149,7 +149,6 @@ export class ChatClient implements Disposable {
     if (this.requiredBadges.length > 0 && !badges.broadcaster) {
       // Check to ensure the user has a required badge
       const canContinue = this.requiredBadges.some((badge) => badges[badge] === '1');
-      // Bail if the user does not have the required badge
       if (!canContinue) {
         this.log(
           LogLevel.Warning,

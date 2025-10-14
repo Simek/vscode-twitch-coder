@@ -4,9 +4,11 @@ All notable changes to this project will be documented in this file.
 
 ## 🚧 Unreleased
 
-- Add setting to enable chat bot connecting automatically when VS Code starts.
-
 ## Released
+
+### 0.2.1 - 2025.10.14
+
+- Add "Auto Connect" setting to enable chat bot connecting to Twitch chat automatically when VS Code starts.
 
 ### 0.2.0 - 2025.10.13
 
