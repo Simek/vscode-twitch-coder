@@ -1,5 +1,6 @@
-import fetch from 'node-fetch';
 import { TwitchKeys } from '../../enums';
+
+const fetch = global.fetch;
 
 export class API {
   /**

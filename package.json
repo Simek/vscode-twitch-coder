@@ -2,7 +2,7 @@
   "name": "vscode-twitch-coder",
   "displayName": "Twitch Coder",
   "description": "Allow viewers to interact with your VS Code editor.",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "preview": false,
   "publisher": "simek",
   "engines": {
@@ -29,12 +29,10 @@
     "bundle": "esbuild src/extension.ts --outdir=out --format=cjs --platform=node --minify --external:vscode --bundle"
   },
   "dependencies": {
-    "node-fetch": "^2.6.1",
     "tmi.js": "^1.8.5"
   },
   "devDependencies": {
     "@types/node": "^22.18.10",
-    "@types/node-fetch": "2.6.13",
     "@types/tmi.js": "^1.8.6",
     "@types/vscode": "^1.104.0",
     "@vscode/test-cli": "^0.0.12",
@@ -300,5 +298,8 @@
         }
       }
     }
+  },
+  "patchedDependencies": {
+    "tmi.js@1.8.5": "patches/tmi.js@1.8.5.patch"
   }
 }

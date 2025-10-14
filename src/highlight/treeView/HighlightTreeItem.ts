@@ -14,16 +14,35 @@ export class HighlightTreeItem extends TreeItem {
     super(label, collapsibleState);
   }
 
-  // @ts-ignore
-  public get description(): string {
-    if (this.highlights.length > 0) {
-      return `Highlights: ${this.highlights.length}`;
+  // @ts-expect-error Override TreeItem description
+  public override get description(): string {
+    const highlightsCount = this.highlights.length;
+
+    if (this.collapsibleState !== TreeItemCollapsibleState.None) {
+      return `Highlights: ${highlightsCount}`;
     }
-    return '';
+
+    if (!highlightsCount) {
+      return '';
+    }
+
+    if (highlightsCount === 1) {
+      const highlight = this.highlights[0];
+      const highlightAuthor = highlight.userName.split(':').at(1) ?? 'unknown';
+
+      if (highlight.comments) {
+        return `${highlightAuthor} - ${highlight.comments}`;
+      }
+
+      return highlightAuthor;
+    } else {
+      return this.highlights.map((highlight) => highlight.userName.split(':').at(1) ?? 'unknown').join(', ');
+    }
   }
 
   public get HighlightTreeItems(): HighlightTreeItem[] {
     const children: HighlightTreeItem[] = [];
+
     this.highlights.forEach((highlight) => {
       const label = `Line: ${highlight.endLine > highlight.startLine ? `${highlight.startLine} - ${highlight.endLine}` : `${highlight.startLine}`}`;
       const existingItem = children.find((item) => item.label === label);
@@ -38,6 +57,7 @@ export class HighlightTreeItem extends TreeItem {
         children.push(new HighlightTreeItem(label, this.fileName, [highlight], TreeItemCollapsibleState.None, command));
       }
     });
+
     return children;
   }
 

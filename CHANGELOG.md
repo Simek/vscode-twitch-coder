@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 ## Released
 
+### 0.3.0 - 2025.10.14
+
+- Drop `node-fetch` in favor of native fetch to reduce extension size by ~75%.
+- Show highlight author and comment in tree view panel.
+
 ### 0.2.1 - 2025.10.14
 
 - Add "Auto Connect" setting to enable chat bot connecting to Twitch chat automatically when VS Code starts.

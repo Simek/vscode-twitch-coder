@@ -1,0 +1,44 @@
+diff --git a/lib/api.js b/W:/.bun/install/cache/tmi.js@1.8.5@@@1/lib/api.js
+deleted file mode 100644
+index 23d2850905764c79f671068d1ad05122de71c027..0000000000000000000000000000000000000000
+diff --git a/lib/client.js b/lib/client.js
+index 81e6388b1f8272ab39a09a60b8c65fafe70a0be5..f8ce32ff5ad975fc20451755eab5a82d283b5f09 100644
+--- a/lib/client.js
++++ b/lib/client.js
+@@ -1,7 +1,6 @@
+ const _global = typeof global !== 'undefined' ? global : typeof window !== 'undefined' ? window : {};
+ const _WebSocket = _global.WebSocket || require('ws');
+-const _fetch = _global.fetch || require('node-fetch');
+-const api = require('./api');
++const _fetch = _global.fetch;
+ const commands = require('./commands');
+ const EventEmitter = require('./events').EventEmitter;
+ const logger = require('./logger');
+@@ -90,14 +89,7 @@ client.prototype.emits = function emits(types, values) {
+ 		this.emit.apply(this, [ types[i] ].concat(val));
+ 	}
+ };
+-/** @deprecated */
+-client.prototype.api = function(...args) {
+-	if(!_apiWarned) {
+-		this.log.warn('Client.prototype.api is deprecated and will be removed for version 2.0.0');
+-		_apiWarned = true;
+-	}
+-	api(...args);
+-};
++
+ // Handle parsed chat server message..
+ client.prototype.handleMessage = function handleMessage(message) {
+ 	if(!message) {
+diff --git a/package.json b/package.json
+index 23096e86e22e20114a55d1e8746544c54f2e9348..53914c6d173b84b7f9af7a49c5e5ac445846ae34 100644
+--- a/package.json
++++ b/package.json
+@@ -45,7 +45,6 @@
+     "url": "https://github.com/tmijs/tmi.js/issues"
+   },
+   "dependencies": {
+-    "node-fetch": "^2.6.1",
+     "ws": "^8.2.0"
+   },
+   "devDependencies": {
