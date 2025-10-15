@@ -2,7 +2,7 @@
   "name": "vscode-twitch-coder",
   "displayName": "Twitch Coder",
   "description": "Allow viewers to interact with your VS Code editor.",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "preview": false,
   "publisher": "simek",
   "engines": {

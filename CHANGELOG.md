@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 ## Released
 
+### 0.3.2 - 2025.10.15
+
+- Fix error when clicking a highlight for an inactive tab in the TreeView panel.
+- Display the correctly formatted file name in incoming highlight notifications.
+
 ### 0.3.1 - 2025.10.15
 
 - Add setting to control whether highlighting a non-active file should switch the editor to that file's tab.

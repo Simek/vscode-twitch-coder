@@ -1,4 +1,6 @@
+import * as path from 'path';
 import * as vscode from 'vscode';
+
 import { HighlighterAPI } from './api';
 import { AppContexts, Commands, Configuration, LogLevel, Settings } from './enums';
 import { HighlightManager, HighlightTreeDataProvider, HighlightTreeItem } from './highlight';
@@ -158,9 +160,9 @@ export class App implements vscode.Disposable {
     }
 
     return vscode.window.createTextEditorDecorationType({
-      backgroundColor: configuration.get<string>(Settings.highlightColor) || 'green',
-      border: configuration.get<string>(Settings.highlightBorder) || '2px solid white',
-      color: configuration.get<string>(Settings.highlightFontColor) || 'white',
+      backgroundColor: configuration.get<string>(Settings.highlightColor) || 'rgba(169,112,255,0.8)',
+      border: configuration.get<string>(Settings.highlightBorder) || '1px solid #d7bdff',
+      color: configuration.get<string>(Settings.highlightFontColor) || '#fff',
     });
   }
 
@@ -274,6 +276,20 @@ export class App implements vscode.Disposable {
     return tabs;
   }
 
+  private getTabInputByFileName(fileName: string): vscode.TabInputText | undefined {
+    const matchedTab = this.getAllOpenTabs().find((tab) => {
+      if (tab.input instanceof vscode.TabInputText) {
+        return tab.input.uri.fsPath.toLowerCase().endsWith(fileName.toLowerCase());
+      }
+      return false;
+    });
+
+    if (matchedTab) {
+      return matchedTab.input as vscode.TabInputText;
+    }
+    return undefined;
+  }
+
   private async requestHighlightHandler(
     service: string,
     userName: string,
@@ -286,23 +302,25 @@ export class App implements vscode.Disposable {
     const isActiveSwitchEnabled = this.config?.get<boolean>(Settings.switchActiveTab);
 
     if (fileName) {
+      const tabInput = this.getTabInputByFileName(fileName);
       if (isActiveSwitchEnabled) {
-        const tab = this.getAllOpenTabs().find((tab) => {
-          if (tab.input instanceof vscode.TabInputText) {
-            return tab.input.uri.fsPath.endsWith(fileName);
-          }
-          return false;
-        });
-
-        if (tab) {
-          if (tab.input instanceof vscode.TabInputText) {
-            await vscode.window.showTextDocument(tab.input.uri, { preserveFocus: false });
-            editor = vscode.window.activeTextEditor;
-          }
+        if (tabInput) {
+          await vscode.window.showTextDocument(tabInput.uri, { preserveFocus: false });
+          editor = vscode.window.activeTextEditor;
         }
       } else {
-        vscode.window.showInformationMessage(`Twitch Coder: New highlight from ${userName} in ${fileName}.`);
-        this._highlightManager.AddQueued(fileName, `${service}:${userName}`, startLine, endLine || startLine, comments);
+        if (tabInput) {
+          vscode.window.showInformationMessage(
+            `Twitch Coder: New highlight from ${userName} in ${tabInput.uri.fsPath.split(path.sep).at(-1)}.`
+          );
+          this._highlightManager.AddQueued(
+            tabInput.uri.fsPath,
+            `${service}:${userName}`,
+            startLine,
+            endLine || startLine,
+            comments
+          );
+        }
         return;
       }
     } else {
