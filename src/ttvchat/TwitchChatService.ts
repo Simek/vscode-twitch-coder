@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
-import { Commands, Configuration, Settings } from '../enums';
-import { HighlighterAPI } from '../index';
-import { log, Logger } from '../logger';
-import { parseMessage } from '../utils';
+
 import { AuthenticationService } from './AuthenticationService';
 import { ChatClient, ChatClientMessageReceivedEvent } from './ChatClient';
+import { Commands, Configuration, Settings } from '../enums';
+import { HighlighterAPI } from '../index';
+import { Logger, log } from '../logger';
+import { parseMessage } from '../utils';
 
 export class TwitchChatService implements vscode.Disposable {
   private readonly _api: HighlighterAPI;
@@ -72,7 +73,7 @@ export class TwitchChatService implements vscode.Disposable {
       vscode.commands.registerCommand(Commands.disconnect, this.chatClient.disconnect, this.chatClient)
     );
 
-    this.chatClient.initialize(context);
+    await this.chatClient.initialize(context);
     await this._authenticationService.initialize();
 
     this.log('ttvchat initialized.');
@@ -99,12 +100,12 @@ export class TwitchChatService implements vscode.Disposable {
     this.config = vscode.workspace.getConfiguration(Configuration.sectionIdentifier);
   }
 
-  private onAuthStatusChangedHandler(signedIn: boolean) {
+  private async onAuthStatusChangedHandler(signedIn: boolean) {
     if (signedIn) {
       this.loginStatusBarItem.hide();
       this.chatClientStatusBarItem.show();
     } else {
-      this.chatClient.disconnect();
+      await this.chatClient.disconnect();
       this.loginStatusBarItem.show();
       this.chatClientStatusBarItem.hide();
     }
@@ -145,9 +146,9 @@ export class TwitchChatService implements vscode.Disposable {
     }
   }
 
-  private onSignOutHandler() {
-    this.chatClient.disconnect();
-    this._authenticationService.signOutHandler();
+  private async onSignOutHandler() {
+    await this.chatClient.disconnect();
+    await this._authenticationService.signOutHandler();
   }
 
   public async dispose() {

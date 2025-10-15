@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import { HighlighterAPI } from './api';
 import { AppContexts, Commands, Configuration, LogLevel, Settings } from './enums';
 import { HighlightManager, HighlightTreeDataProvider, HighlightTreeItem } from './highlight';
-import { log, Logger } from './logger';
+import { Logger, log } from './logger';
 import { parseMessage } from './utils';
 
 export class App implements vscode.Disposable {

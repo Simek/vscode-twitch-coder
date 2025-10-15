@@ -1,19 +1,20 @@
 import { Badges, ChatUserstate, Client, Options } from 'tmi.js';
 import {
-  commands,
   ConfigurationChangeEvent,
   Disposable,
   Event,
   EventEmitter,
   ExtensionContext,
-  workspace,
   WorkspaceConfiguration,
+  commands,
   window,
+  workspace,
 } from 'vscode';
-import CredentialManager from '../credentialManager';
-import { Configuration, SecretKeys, LogLevel, Settings } from '../enums';
-import { log } from '../logger';
+
 import { API } from './api/API';
+import CredentialManager from '../credentialManager';
+import { Configuration, LogLevel, SecretKeys, Settings } from '../enums';
+import { log } from '../logger';
 
 type BadgesType = Badges & {
   follower: string;
@@ -43,7 +44,7 @@ export class ChatClient implements Disposable {
 
   constructor(private log: log) {}
 
-  public initialize(context: ExtensionContext) {
+  public async initialize(context: ExtensionContext) {
     this.config = workspace.getConfiguration(Configuration.sectionIdentifier);
     this.autoConnect = this.config.get<boolean>(Settings.autoConnect) || false;
     this.announceBot = this.config.get<boolean>(Settings.announceBot) || true;
@@ -52,7 +53,7 @@ export class ChatClient implements Disposable {
     this.requiredBadges = this.config.get<string[]>(Settings.requiredBadges) || [];
 
     if (this.autoConnect) {
-      this.connect();
+      await this.connect();
     }
 
     context.subscriptions.push(workspace.onDidChangeConfiguration(this.onDidChangeConfigurationHandler, this));
@@ -162,7 +163,7 @@ export class ChatClient implements Disposable {
 
     if (message.startsWith('!line') || message.startsWith('!highlight')) {
       if (message.length === 0) {
-        this.sendMessage(
+        await this.sendMessage(
           '💡 To use the !line command, use the following format: !line <number> --or-- multiple lines: !line <start>-<end> --or-- with a comment: !line <number> <comment>'
         );
         return;

@@ -1,13 +1,14 @@
-import { readFileSync } from 'fs';
+import { readFile, readFileSync } from 'fs';
 import * as http from 'http';
-import * as path from 'path';
+import { join } from 'path';
 import { randomUUID } from 'crypto';
-import { env, Event, EventEmitter, extensions, Uri, window } from 'vscode';
+import { Event, EventEmitter, Uri, env, extensions, window } from 'vscode';
+
+import { API } from './api/API';
 import CredentialManager from '../credentialManager';
 import { extensionId } from '../constants';
-import { SecretKeys, LogLevel, TwitchKeys } from '../enums';
+import { LogLevel, SecretKeys, TwitchKeys } from '../enums';
 import { log } from '../logger';
-import { API } from './api/API';
 
 export class AuthenticationService {
   private readonly _onAuthStatusChanged: EventEmitter<boolean> = new EventEmitter();
@@ -40,7 +41,7 @@ export class AuthenticationService {
     const accessToken = await CredentialManager.getSecret(SecretKeys.account);
     if (!accessToken) {
       const state = randomUUID();
-      this.createServer(state);
+      await this.createServer(state);
 
       env.openExternal(
         Uri.parse(
@@ -67,19 +68,13 @@ export class AuthenticationService {
         window.showInformationMessage('Twitch token revoked successfully');
       }
     }
-    CredentialManager.deleteSecret(SecretKeys.account);
-    CredentialManager.deleteSecret(SecretKeys.userLogin);
+    await CredentialManager.deleteSecret(SecretKeys.account);
+    await CredentialManager.deleteSecret(SecretKeys.userLogin);
     this._onAuthStatusChanged.fire(false);
   }
 
-  private createServer(state: string) {
-    const filePath = path.join(
-      extensions.getExtension(extensionId)!.extensionPath,
-      'out',
-      'ttvchat',
-      'login',
-      'index.html'
-    );
+  private async createServer(state: string) {
+    const filePath = join(extensions.getExtension(extensionId)!.extensionPath, 'out', 'ttvchat', 'login', 'index.html');
 
     this.log(LogLevel.Debug, `Starting login server using filePath: ${filePath}.`);
 
@@ -115,8 +110,8 @@ export class AuthenticationService {
 
           const validationResult = await API.validateToken(accessToken);
           if (validationResult.valid) {
-            CredentialManager.setSecret(SecretKeys.account, accessToken);
-            CredentialManager.setSecret(SecretKeys.userLogin, validationResult.login);
+            await CredentialManager.setSecret(SecretKeys.account, accessToken);
+            await CredentialManager.setSecret(SecretKeys.userLogin, validationResult.login);
             this._onAuthStatusChanged.fire(true);
           }
 
@@ -126,9 +121,23 @@ export class AuthenticationService {
           res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
           res.end(file);
           setTimeout(() => server.close(), 3000);
-        } else if (path === '/favicon.ico') {
-          res.writeHead(204);
-          res.end();
+        } else if (path === '/twitch-coder-icon.png') {
+          const imagePath = join(
+            extensions.getExtension(extensionId)!.extensionPath,
+            'resources',
+            'twitch-coder-icon.png'
+          );
+
+          readFile(imagePath, (err, data) => {
+            if (err) {
+              res.writeHead(404, { 'Content-Type': 'text/plain' });
+              res.end('Image not found');
+              return;
+            }
+
+            res.writeHead(200, { 'Content-Type': 'image/png' });
+            res.end(data);
+          });
         }
       });
 

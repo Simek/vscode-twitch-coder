@@ -1,10 +1,9 @@
-import { extensionId, extSuffix } from '../../constants';
-import { Settings } from '../../enums';
-import { Commands } from '../../enums';
-
 import * as assert from 'assert';
-import { suite, test, setup } from 'mocha';
+import { setup, suite, test } from 'mocha';
 import * as vscode from 'vscode';
+
+import { extSuffix, extensionId } from '../../constants';
+import { Commands, Settings } from '../../enums';
 
 type Command = {
   title: string;

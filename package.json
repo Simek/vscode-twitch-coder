@@ -24,7 +24,7 @@
     "vscode:test": "bun vscode:test-prepare && bun vscode-test",
     "vscode:test-prepare": "rimraf ./tests-out && tsc -p ./ --outDir ./tests-out",
     "package": "bun vsce package --allow-star-activation",
-    "format": "bun prettier . --write --experimental-cli",
+    "format": "bunx oxlint --type-aware --fix && bun prettier . --write --experimental-cli",
     "compile": "rimraf ./out && tsc -p ./ --noEmit && copyfiles -au 1 ./src/**/*.html out/ && bun bundle",
     "bundle": "esbuild src/extension.ts --outdir=out --format=cjs --platform=node --minify --external:vscode --bundle"
   },
@@ -39,8 +39,10 @@
     "@vscode/test-electron": "^2.5.2",
     "@vscode/vsce": "^3.6.2",
     "copyfiles": "^2.3.0",
-    "esbuild": "^0.25.10",
+    "esbuild": "^0.25.11",
     "glob": "^11.0.3",
+    "oxlint": "^1.23.0",
+    "oxlint-tsgolint": "^0.2.0",
     "prettier": "3.6.2",
     "rimraf": "^6.0.1",
     "typescript": "5.9.3"

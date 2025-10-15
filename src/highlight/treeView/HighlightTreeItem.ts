@@ -1,4 +1,4 @@
-import { TreeItem, TreeItemCollapsibleState, Command } from 'vscode';
+import { Command, TreeItem, TreeItemCollapsibleState } from 'vscode';
 
 import { Highlight } from '../Highlight';
 import { Commands } from '../../enums';

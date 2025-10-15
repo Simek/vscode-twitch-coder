@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 
 ## 🚧 Unreleased
 
+- Improve Twitch OAuth App callback page.
+
 ## Released
 
 ### 0.3.2 - 2025.10.15

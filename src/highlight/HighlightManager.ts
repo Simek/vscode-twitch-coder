@@ -1,11 +1,11 @@
 import {
-  TextDocument,
-  Range,
-  Position,
-  EventEmitter,
-  Event,
-  TextDocumentContentChangeEvent,
   DecorationOptions,
+  Event,
+  EventEmitter,
+  Position,
+  Range,
+  TextDocument,
+  TextDocumentContentChangeEvent,
 } from 'vscode';
 
 import { Highlight } from './Highlight';
@@ -54,133 +54,109 @@ export class HighlightManager {
     return [];
   }
 
-  public Add(
-    document: TextDocument,
-    userName: string,
-    startLine: number,
-    endLine?: number,
-    comments?: string
-  ): Promise<void> {
-    return new Promise((resolve) => {
-      if (!endLine) {
-        endLine = startLine;
+  public Add(document: TextDocument, userName: string, startLine: number, endLine?: number, comments?: string): void {
+    if (!endLine) {
+      endLine = startLine;
+    }
+
+    const range = new Range(
+      new Position(--startLine, 0),
+      new Position(--endLine, document.lineAt(endLine).text.length)
+    );
+
+    const highlight = new Highlight(userName, range, comments);
+
+    const idx = this.highlightCollection.findIndex((h) =>
+      document.fileName.toLowerCase().endsWith(h.fileName.toLowerCase())
+    );
+    if (idx > -1) {
+      if (
+        !this.highlightCollection[idx].highlights.some(
+          (h) => (h.userName === userName || userName === 'self') && h.startLine <= startLine && h.endLine >= endLine!
+        )
+      ) {
+        this.highlightCollection[idx].highlights.push(highlight);
       }
+    } else {
+      this.highlightCollection.push({
+        fileName: document.fileName,
+        highlights: [highlight],
+      });
+    }
 
-      const range = new Range(
-        new Position(--startLine, 0),
-        new Position(--endLine, document.lineAt(endLine).text.length)
-      );
-
-      const highlight = new Highlight(userName, range, comments);
-
-      const idx = this.highlightCollection.findIndex((h) =>
-        document.fileName.toLowerCase().endsWith(h.fileName.toLowerCase())
-      );
-      if (idx > -1) {
-        if (
-          !this.highlightCollection[idx].highlights.some(
-            (h) => (h.userName === userName || userName === 'self') && h.startLine <= startLine && h.endLine >= endLine!
-          )
-        ) {
-          this.highlightCollection[idx].highlights.push(highlight);
-        }
-      } else {
-        this.highlightCollection.push({
-          fileName: document.fileName,
-          highlights: [highlight],
-        });
-      }
-
-      this._onHighlightsChanged.fire({});
-      resolve();
-    });
+    this._onHighlightsChanged.fire({});
   }
 
-  public AddQueued(
-    fileName: string,
-    userName: string,
-    startLine: number,
-    endLine?: number,
-    comments?: string
-  ): Promise<void> {
-    return new Promise((resolve) => {
-      if (!endLine) {
-        endLine = startLine;
+  public AddQueued(fileName: string, userName: string, startLine: number, endLine?: number, comments?: string): void {
+    if (!endLine) {
+      endLine = startLine;
+    }
+
+    const range = new Range(new Position(--startLine, 0), new Position(--endLine, 9999));
+
+    const highlight = new Highlight(userName, range, comments);
+
+    const idx = this.highlightCollection.findIndex((h) => h.fileName.toLowerCase().endsWith(fileName.toLowerCase()));
+    if (idx > -1) {
+      if (
+        !this.highlightCollection[idx].highlights.some(
+          (h) => (h.userName === userName || userName === 'self') && h.startLine <= startLine && h.endLine >= endLine!
+        )
+      ) {
+        this.highlightCollection[idx].highlights.push(highlight);
       }
+    } else {
+      this.highlightCollection.push({
+        fileName,
+        highlights: [highlight],
+      });
+    }
 
-      const range = new Range(new Position(--startLine, 0), new Position(--endLine, 9999));
-
-      const highlight = new Highlight(userName, range, comments);
-
-      const idx = this.highlightCollection.findIndex((h) => h.fileName.toLowerCase().endsWith(fileName.toLowerCase()));
-      if (idx > -1) {
-        if (
-          !this.highlightCollection[idx].highlights.some(
-            (h) => (h.userName === userName || userName === 'self') && h.startLine <= startLine && h.endLine >= endLine!
-          )
-        ) {
-          this.highlightCollection[idx].highlights.push(highlight);
-        }
-      } else {
-        this.highlightCollection.push({
-          fileName,
-          highlights: [highlight],
-        });
-      }
-
-      this._onHighlightsChanged.fire({});
-      resolve();
-    });
+    this._onHighlightsChanged.fire({});
   }
 
-  public Remove(document: TextDocument, userName: string, lineNumber: number, deferRefresh?: boolean): Promise<void>;
-  public Remove(fileName: string, userName: string, lineNumber: number, deferRefresh?: boolean): Promise<void>;
+  public Remove(document: TextDocument, userName: string, lineNumber: number, deferRefresh?: boolean): void;
+  public Remove(fileName: string, userName: string, lineNumber: number, deferRefresh?: boolean): void;
   public Remove(
     documentOrFileName: TextDocument | string,
     userName: string,
     lineNumber: number,
     deferRefresh: boolean = false
-  ): Promise<void> {
-    return new Promise<void>((resolve) => {
-      if (!(typeof documentOrFileName === 'string')) {
-        documentOrFileName = documentOrFileName.fileName;
-      }
+  ): void {
+    if (!(typeof documentOrFileName === 'string')) {
+      documentOrFileName = documentOrFileName.fileName;
+    }
 
-      const idx = this.highlightCollection.findIndex((h) => h.fileName === documentOrFileName);
-      if (idx > -1) {
-        const hidx = this.highlightCollection[idx].highlights.findIndex(
-          (h) =>
-            (h.userName === userName || userName === 'self') && h.startLine <= lineNumber && h.endLine >= lineNumber
-        );
-        if (hidx > -1) {
-          this.highlightCollection[idx].highlights.splice(hidx, 1);
-        }
-        if (!deferRefresh) {
-          this._onHighlightsChanged.fire({});
-        }
+    const idx = this.highlightCollection.findIndex((h) => h.fileName === documentOrFileName);
+    if (idx > -1) {
+      const hidx = this.highlightCollection[idx].highlights.findIndex(
+        (h) => (h.userName === userName || userName === 'self') && h.startLine <= lineNumber && h.endLine >= lineNumber
+      );
+      if (hidx > -1) {
+        this.highlightCollection[idx].highlights.splice(hidx, 1);
       }
-      resolve();
-    });
+      if (!deferRefresh) {
+        this._onHighlightsChanged.fire({});
+      }
+    }
   }
 
   public Refresh() {
     this._onHighlightsChanged.fire({});
   }
 
-  public Clear(service?: string): Promise<void> {
-    return new Promise<void>(() => {
-      if (service) {
-        this.highlightCollection.forEach((hc) => {
-          const highlightsToRemove = hc.highlights.filter((h) => h.userName.indexOf(`${service}:`) > -1);
-          highlightsToRemove.forEach((h) => {
-            this.Remove(hc.fileName, h.userName, h.startLine, true);
-          });
+  public Clear(service?: string): void {
+    if (service) {
+      this.highlightCollection.forEach((hc) => {
+        const highlightsToRemove = hc.highlights.filter((h) => h.userName.indexOf(`${service}:`) > -1);
+        highlightsToRemove.forEach((h) => {
+          this.Remove(hc.fileName, h.userName, h.startLine, true);
         });
-      } else {
-        this.highlightCollection = [];
-      }
-      this._onHighlightsChanged.fire({});
-    });
+      });
+    } else {
+      this.highlightCollection = [];
+    }
+    this._onHighlightsChanged.fire({});
   }
 
   public Rename(oldName: string, newName: string) {

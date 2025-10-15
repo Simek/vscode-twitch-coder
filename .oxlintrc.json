@@ -1,0 +1,9 @@
+{
+  "rules": {
+    "always-return": "error",
+    "no-useless-call": "error",
+    "no-useless-escape": "off",
+    "import/no-cycle": "error",
+    "typescript/unbound-method": "off"
+  }
+}

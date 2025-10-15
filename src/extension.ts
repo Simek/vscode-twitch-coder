@@ -1,17 +1,16 @@
 import * as vscode from 'vscode';
 
-import CredentialManager from './credentialManager';
-
 import { App } from './app';
-import { TwitchChatService } from './ttvchat';
+import CredentialManager from './credentialManager';
 import { SecretKeys } from './enums';
+import { TwitchChatService } from './ttvchat';
 
 let app: App;
 let ttvchat: TwitchChatService;
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
   CredentialManager.setup(context);
-  CredentialManager.deleteSecret(SecretKeys.twitchToken);
+  await CredentialManager.deleteSecret(SecretKeys.twitchToken);
 
   const outputChannel = vscode.window.createOutputChannel('Twitch Coder');
 
@@ -19,13 +18,13 @@ export function activate(context: vscode.ExtensionContext) {
   ttvchat = new TwitchChatService(context, app.API, outputChannel);
 
   app.intialize(context);
-  ttvchat.initialize(context);
+  await ttvchat.initialize(context);
 
   return app.API;
 }
 
-export function deactivate() {
-  ttvchat.dispose();
+export async function deactivate() {
+  await ttvchat.dispose();
 }
 
 export function editorHasDecorations() {

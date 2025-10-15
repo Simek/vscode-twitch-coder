@@ -1,5 +1,5 @@
-import { TreeDataProvider, EventEmitter, Event, TreeItem, TreeItemCollapsibleState } from 'vscode';
 import { basename } from 'path';
+import { Event, EventEmitter, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode';
 
 import { HighlightTreeItem } from './HighlightTreeItem';
 import { HighlightCollection } from '../HighlightManager';
