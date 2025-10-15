@@ -3,7 +3,7 @@
 .vscode-test/**
 node_modules/**
 out/test/**
-out/**/*.map
+patches/**
 resources/**
 !resources/twitch-coder-icon.png
 src/**
@@ -11,8 +11,8 @@ tests/**
 tests-out/**
 .gitignore
 .prettierignore
-build.yml
+.vscode-test.mjs
 bun.lock
 tsconfig.json
 tslint.json
-webpack.config.js
+TODO.md
