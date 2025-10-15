@@ -11,7 +11,6 @@ export class App implements vscode.Disposable {
   private log: log;
   private highlightDecorationType: vscode.TextEditorDecorationType;
   private currentDocument?: vscode.TextDocument;
-  // @ts-expect-error Not used yet
   private config?: vscode.WorkspaceConfiguration;
 
   constructor(outputChannel?: vscode.OutputChannel) {
@@ -284,20 +283,27 @@ export class App implements vscode.Disposable {
     fileName?: string
   ): Promise<void> {
     let editor: vscode.TextEditor | undefined = undefined;
+    const isActiveSwitchEnabled = this.config?.get<boolean>(Settings.switchActiveTab);
 
     if (fileName) {
-      const tab = this.getAllOpenTabs().find((tab) => {
-        if (tab.input instanceof vscode.TabInputText) {
-          return tab.input.uri.fsPath.endsWith(fileName);
-        }
-        return false;
-      });
+      if (isActiveSwitchEnabled) {
+        const tab = this.getAllOpenTabs().find((tab) => {
+          if (tab.input instanceof vscode.TabInputText) {
+            return tab.input.uri.fsPath.endsWith(fileName);
+          }
+          return false;
+        });
 
-      if (tab) {
-        if (tab.input instanceof vscode.TabInputText) {
-          await vscode.window.showTextDocument(tab.input.uri, { preserveFocus: false });
-          editor = vscode.window.activeTextEditor;
+        if (tab) {
+          if (tab.input instanceof vscode.TabInputText) {
+            await vscode.window.showTextDocument(tab.input.uri, { preserveFocus: false });
+            editor = vscode.window.activeTextEditor;
+          }
         }
+      } else {
+        vscode.window.showInformationMessage(`Twitch Coder: New highlight from ${userName} in ${fileName}.`);
+        this._highlightManager.AddQueued(fileName, `${service}:${userName}`, startLine, endLine || startLine, comments);
+        return;
       }
     } else {
       editor = vscode.window.activeTextEditor;
@@ -311,7 +317,8 @@ export class App implements vscode.Disposable {
       );
       return;
     }
-    this._highlightManager.Add(editor!.document, `${service}:${userName}`, startLine, endLine || startLine, comments);
+
+    this._highlightManager.Add(editor.document, `${service}:${userName}`, startLine, endLine || startLine, comments);
   }
 
   private requestUnhighlightHandler(service: string, userName: string, lineNumber: number): void {

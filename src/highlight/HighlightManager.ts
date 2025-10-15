@@ -40,7 +40,9 @@ export class HighlightManager {
   }
 
   public GetDecorations(fileName: string): DecorationOptions[] {
-    const idx = this.highlightCollection.findIndex((hc) => hc.fileName === fileName);
+    const idx = this.highlightCollection.findIndex(
+      (hc) => hc.fileName === fileName || fileName.toLowerCase().endsWith(hc.fileName.toLowerCase())
+    );
     if (idx > -1) {
       return this.highlightCollection[idx].highlights.map<DecorationOptions>((h) => {
         return {
@@ -71,7 +73,9 @@ export class HighlightManager {
 
       const highlight = new Highlight(userName, range, comments);
 
-      const idx = this.highlightCollection.findIndex((h) => h.fileName === document.fileName);
+      const idx = this.highlightCollection.findIndex((h) =>
+        document.fileName.toLowerCase().endsWith(h.fileName.toLowerCase())
+      );
       if (idx > -1) {
         if (
           !this.highlightCollection[idx].highlights.some(
@@ -83,6 +87,43 @@ export class HighlightManager {
       } else {
         this.highlightCollection.push({
           fileName: document.fileName,
+          highlights: [highlight],
+        });
+      }
+
+      this._onHighlightsChanged.fire({});
+      resolve();
+    });
+  }
+
+  public AddQueued(
+    fileName: string,
+    userName: string,
+    startLine: number,
+    endLine?: number,
+    comments?: string
+  ): Promise<void> {
+    return new Promise((resolve) => {
+      if (!endLine) {
+        endLine = startLine;
+      }
+
+      const range = new Range(new Position(--startLine, 0), new Position(--endLine, 9999));
+
+      const highlight = new Highlight(userName, range, comments);
+
+      const idx = this.highlightCollection.findIndex((h) => h.fileName.toLowerCase().endsWith(fileName.toLowerCase()));
+      if (idx > -1) {
+        if (
+          !this.highlightCollection[idx].highlights.some(
+            (h) => (h.userName === userName || userName === 'self') && h.startLine <= startLine && h.endLine >= endLine!
+          )
+        ) {
+          this.highlightCollection[idx].highlights.push(highlight);
+        }
+      } else {
+        this.highlightCollection.push({
+          fileName,
           highlights: [highlight],
         });
       }

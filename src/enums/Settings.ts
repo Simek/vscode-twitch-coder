@@ -12,4 +12,5 @@ export enum Settings {
   'showHighlightsInActivityBar' = 'showHighlightsInActivityBar',
   'usageTip' = 'usageTip',
   'requiredBadges' = 'requiredBadges',
+  'switchActiveTab' = 'switchActiveTab',
 }

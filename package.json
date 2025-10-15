@@ -2,7 +2,7 @@
   "name": "vscode-twitch-coder",
   "displayName": "Twitch Coder",
   "description": "Allow viewers to interact with your VS Code editor.",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "preview": false,
   "publisher": "simek",
   "engines": {
@@ -249,6 +249,11 @@
           "type": "string",
           "default": "",
           "description": "The username the chat bot should use when joining a Twitch channel."
+        },
+        "twitchCoder.switchActiveTab": {
+          "type": "boolean",
+          "default": false,
+          "description": "Allow incoming highlight to switch the currently active editor tab."
         },
         "twitchCoder.autoConnect": {
           "type": "boolean",
