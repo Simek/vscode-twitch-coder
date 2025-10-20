@@ -45,12 +45,7 @@ export class ChatClient implements Disposable {
   constructor(private log: log) {}
 
   public async initialize(context: ExtensionContext) {
-    this.config = workspace.getConfiguration(Configuration.sectionIdentifier);
-    this.autoConnect = this.config.get<boolean>(Settings.autoConnect) || false;
-    this.announceBot = this.config.get<boolean>(Settings.announceBot) || true;
-    this.joinMessage = this.config.get<string>(Settings.joinMessage) || '';
-    this.leaveMessage = this.config.get<string>(Settings.leaveMessage) || '';
-    this.requiredBadges = this.config.get<string[]>(Settings.requiredBadges) || [];
+    this.updateConfig();
 
     if (this.autoConnect) {
       await this.connect();
@@ -59,7 +54,18 @@ export class ChatClient implements Disposable {
     context.subscriptions.push(workspace.onDidChangeConfiguration(this.onDidChangeConfigurationHandler, this));
   }
 
-  public async connect() {
+  public updateConfig() {
+    this.config = workspace.getConfiguration(Configuration.sectionIdentifier);
+    this.autoConnect = this.config.get<boolean>(Settings.autoConnect) || false;
+    this.announceBot = this.config.get<boolean>(Settings.announceBot) || true;
+    this.joinMessage = this.config.get<string>(Settings.joinMessage) || '';
+    this.leaveMessage = this.config.get<string>(Settings.leaveMessage) || '';
+    this.requiredBadges = this.config.get<string[]>(Settings.requiredBadges) || [];
+  }
+
+  public async connect(silent: boolean = false) {
+    this.updateConfig();
+
     if (this.config && !this.isConnected) {
       const accessToken = await CredentialManager.getSecret(SecretKeys.account);
       const login = await CredentialManager.getSecret(SecretKeys.userLogin);
@@ -85,7 +91,9 @@ export class ChatClient implements Disposable {
         this.client = Client(opts);
         this.client.on('connected', this.onConnectedHandler.bind(this));
         this.client.on('message', this.onMessageHandler.bind(this));
-        this.client.on('join', this.onJoinHandler.bind(this));
+        if (!silent) {
+          this.client.on('join', this.onJoinHandler.bind(this));
+        }
 
         const status = await this.client.connect();
         this._onChatClientConnected.fire(true);
@@ -95,9 +103,9 @@ export class ChatClient implements Disposable {
     return undefined;
   }
 
-  public async disconnect() {
+  public async disconnect(silent: boolean = false) {
     if (this.isConnected) {
-      if (this.announceBot && this.leaveMessage.length > 0) {
+      if (!silent && this.announceBot && this.leaveMessage.length > 0) {
         await this.sendMessage(this.leaveMessage);
       }
       if (this.client) {
@@ -176,11 +184,11 @@ export class ChatClient implements Disposable {
   }
 
   private async onDidChangeConfigurationHandler(event: ConfigurationChangeEvent) {
-    this.config = workspace.getConfiguration(Configuration.sectionIdentifier);
+    this.updateConfig();
 
     if (event.affectsConfiguration(Configuration.sectionIdentifier) && this.isConnected) {
-      await this.disconnect();
-      await this.connect();
+      await this.disconnect(true);
+      await this.connect(true);
     }
   }
 }

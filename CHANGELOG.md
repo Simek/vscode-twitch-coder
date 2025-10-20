@@ -4,9 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## 🚧 Unreleased
 
-- Improve Twitch OAuth App callback page.
-
 ## Released
+
+### 0.3.3 - 2025.10.20
+
+- Improve Twitch OAuth App callback page.
+- Re-connect silently when user changes settings while bot is connected and active.
 
 ### 0.3.2 - 2025.10.15
 
