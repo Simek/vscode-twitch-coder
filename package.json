@@ -255,7 +255,7 @@
         "twitchCoder.switchActiveTab": {
           "type": "boolean",
           "default": false,
-          "description": "Allow incoming highlight to switch the currently active editor tab."
+          "description": "Whether or not allow the incoming highlight to switch the currently active editor tab."
         },
         "twitchCoder.autoConnect": {
           "type": "boolean",
@@ -291,7 +291,7 @@
         "twitchCoder.unhighlightOnDisconnect": {
           "type": "boolean",
           "default": false,
-          "description": "Unhighlight all lines when disconnected from the chat service."
+          "description": "Whether or not unhighlight all lines when disconnected from the chat service."
         },
         "twitchCoder.showHighlightsInActivityBar": {
           "type": "boolean",
