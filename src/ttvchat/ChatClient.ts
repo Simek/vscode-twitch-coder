@@ -40,6 +40,7 @@ export class ChatClient implements Disposable {
   private announceBot: boolean = true;
   private joinMessage: string = '';
   private leaveMessage: string = '';
+  private usageTip: string = '';
   private requiredBadges: string[] = [];
 
   constructor(private log: log) {}
@@ -60,6 +61,7 @@ export class ChatClient implements Disposable {
     this.announceBot = this.config.get<boolean>(Settings.announceBot) || true;
     this.joinMessage = this.config.get<string>(Settings.joinMessage) || '';
     this.leaveMessage = this.config.get<string>(Settings.leaveMessage) || '';
+    this.usageTip = this.config.get<string>(Settings.usageTip) || '';
     this.requiredBadges = this.config.get<string[]>(Settings.requiredBadges) || [];
   }
 
@@ -170,10 +172,9 @@ export class ChatClient implements Disposable {
     message = message.toLocaleLowerCase().trim();
 
     if (message.startsWith('!line') || message.startsWith('!highlight')) {
-      if (message.length === 0) {
-        await this.sendMessage(
-          '💡 To use the !line command, use the following format: !line <number> --or-- multiple lines: !line <start>-<end> --or-- with a comment: !line <number> <comment>'
-        );
+      const messageContent = message.split(' ').slice(1).join(' ').trim();
+      if (messageContent.length === 0) {
+        await this.sendMessage(this.usageTip);
         return;
       }
       this._onChatClientMessageReceived.fire({

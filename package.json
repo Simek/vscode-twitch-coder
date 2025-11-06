@@ -2,7 +2,7 @@
   "name": "vscode-twitch-coder",
   "displayName": "Twitch Coder",
   "description": "A VS Code extension that lets your Twitch viewers help spot bugs, typos, and more by sending chat commands that highlight lines of code.",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "preview": false,
   "publisher": "simek",
   "engines": {
@@ -300,8 +300,8 @@
         },
         "twitchCoder.usageTip": {
           "type": "string",
-          "default": "💡 To use the !line command, use the following format: !line <number> --or-- multiple lines: !line <start>-<end> --or-- with a comment: !line <number> <comment> --or-- inactive, but open file: line <fileName> <number> <comment>",
-          "description": "A tip shared by the bot when a user chats: `!line`."
+          "default": "💡 To use the line highlight command, type in the following format: `!line <number>` 🟣 for multiple lines: `!line <start>-<end>` 🟣 with a comment: `!line <number> <comment>` 🟣 for inactive, but open file: `!line <fileName> <number> <comment>`",
+          "description": "A tip shared by the bot when a user chats: `!line` or `!highlight`."
         }
       }
     }

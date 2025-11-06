@@ -46,7 +46,7 @@ export class HighlightManager {
     if (idx > -1) {
       return this.highlightCollection[idx].highlights.map<DecorationOptions>((h) => {
         return {
-          hoverMessage: `From ${h.userName === 'self' ? 'You' : h.userName} ${h.comments !== undefined ? h.comments : ''}`,
+          hoverMessage: `From ${h.userName.startsWith('self:') ? 'me' : (h.userName.split(':').at(-1) ?? 'Twitch user')}: ${h.comments !== undefined ? h.comments : ''}`,
           range: h.range,
         };
       });
@@ -70,11 +70,7 @@ export class HighlightManager {
       document.fileName.toLowerCase().endsWith(h.fileName.toLowerCase())
     );
     if (idx > -1) {
-      if (
-        !this.highlightCollection[idx].highlights.some(
-          (h) => (h.userName === userName || userName === 'self') && h.startLine <= startLine && h.endLine >= endLine!
-        )
-      ) {
+      if (!this.HighlightExists(idx, userName, startLine, endLine)) {
         this.highlightCollection[idx].highlights.push(highlight);
       }
     } else {
@@ -98,11 +94,7 @@ export class HighlightManager {
 
     const idx = this.highlightCollection.findIndex((h) => h.fileName.toLowerCase().endsWith(fileName.toLowerCase()));
     if (idx > -1) {
-      if (
-        !this.highlightCollection[idx].highlights.some(
-          (h) => (h.userName === userName || userName === 'self') && h.startLine <= startLine && h.endLine >= endLine!
-        )
-      ) {
+      if (!this.HighlightExists(idx, userName, startLine, endLine)) {
         this.highlightCollection[idx].highlights.push(highlight);
       }
     } else {
@@ -248,5 +240,11 @@ export class HighlightManager {
     if (updated) {
       this._onHighlightsChanged.fire({});
     }
+  }
+
+  private HighlightExists(idx: number, userName: string, startLine: number, endLine?: number): boolean {
+    return this.highlightCollection[idx].highlights.some(
+      (h) => (h.userName === userName || userName === 'self') && h.startLine <= startLine && h.endLine >= endLine!
+    );
   }
 }

@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 ## Released
 
+### 0.3.4 - 2025.11.06
+
+- Improve the tooltip content over highlighted line.
+- Fix integration usage tip for viewers not being sent to chat.
+
 ### 0.3.3 - 2025.10.20
 
 - Improve Twitch OAuth App callback page.
