@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 ## Released
 
+### 0.3.5 - 2025.11.06
+
+- Fix README promo asset scaling and sizing issues in stores.
+
 ### 0.3.4 - 2025.11.06
 
 - Improve the tooltip content over highlighted line.
