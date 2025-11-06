@@ -10,9 +10,11 @@
 
 A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos, etc. by sending a command in chat that will highlight the line of code they want you to check.
 
+<img width="1677" height="641" alt="screenshot" src="https://github.com/user-attachments/assets/b8438410-b8ea-44bb-86ef-e7e2e8de20e3" />
+
 ## 🔧 Requirements
 
-In order to use this extension you will need the following things before going to the [Getting Started](#getting-started) section.
+In order to use this extension you will need the following things before going to the "Getting Started" section.
 
 - An installed version of [VS Code](https://code.visualstudio.com/)
 - A Twitch account for yourself or a separate one to be used as a chat bot ([sign up here](https://www.twitch.tv/signup))
@@ -29,14 +31,12 @@ In order to use this extension you will need the following things before going t
 
    > If you'd like to connect to more than one channel separate them by commas `,`, for example: `simek,dev_spajus`.
 
-5. Save your changes and close that tab. Go back to the Settings UI tab.
-6. Find the `Nickname` setting. If you are using your own account for the chat bot then enter your account username as the value here. If you created a separate account use that username. Save your changes.
-7. Make sure you're logged in to the Twitch account you wish to authorize the highlighter bot to access in your default browser.
-8. In the status bar, click the "Twitch" button. After clicking it, you'll see a notification that the extension wants to open a URL.
-9. Choose the "Open" option which should open a new tab of your default browser.
-10. Read through the permissions that are being requested for use of this bot/extension and choose "Authorize".
-11. You should then be notified that you can close the browser/tab.
-12. Go back to VS Code and you should now see "Disconnected" in the status bar. Click on it to Connect the bot to chat and start listening for highlight commands.
+5. Find the `Twitch Coder: Nickname` setting. If you are using your own account for the chat bot then enter your account username as the value here. If you created a separate account use that username. Save your changes.
+6. Make sure you're logged in to the Twitch account you wish to authorize the highlighter bot to access in your default browser.
+7. In the status bar, click the "Twitch" button. After clicking it, you'll see a notification that the extension wants to open a URL.
+8. Choose the "Open" option which should open a new tab of your default browser.
+9. Read through the permissions that are being requested for use of this bot/extension and choose "Authorize". You will be notified that you can close the browser/tab.
+11. Go back to VS Code and you should now see "Disconnected" in the status bar. Click on it to connect the bot to chat and start listening for highlight commands.
 
 ## 💬 Twitch Commands
 
@@ -72,22 +72,23 @@ Or highlight the line in one of opened tabs, which is not in active (it also wor
 
 ## ⚙️ Extension Settings
 
-- `twitchCoder.channels`: A comma separated list of channel name(s) to connect to on Twitch. Example: 'clarkio', Another Example: 'clarkio, parithon'
-- `twitchCoder.nickname`: The username the bot should use when joining a Twitch channel.
+- `twitchCoder.channels`: A comma separated list of channel name(s) to connect to on Twitch. Example: `simek` or for multiple channels: `simek, dev_spajus`.
+- `twitchCoder.nickname`: The username the chat bot should use when joining a Twitch channel.
 
   > Note: this is required if you'd like to have the bot send join/leave messages in your chat. It also needs to match the Twitch username with which you generated the OAuth token.
 
-- `twitchCoder.highlightColor`: Background color of the decoration (default: green). Use `rgba()` and define transparent background colors to play well with other decorations.
-- `twitchCoder.highlightFontColor`: Font color of the decoration (default: white). Use `rgba()` and define transparent background colors to play well with other decorations.
-
-* `twitchCoder.highlightBorder`: CSS styling property that will be applied to text enclosed by a decoration.
-* `twitchCoder.announceBot`: Whether or not the bot should announce its joining or leaving the chat room.
-* `twitchCoder.joinMessage`: The message the bot will say when joining a chat room
-* `twitchCoder.leaveMessage`: The message the bot will say when leaving a chat room
-
-* `twitchCoder.showHighlightsInActivityBar`: Show the Highlights icon in the activity bar to display the tree view.
-
-* `twitchCoder.usageTip`: A tip shared by the bot when a user chats: '!line'.
+- `twitchCoder.highlightColor`: Background color of the decoration. Use `rgba()` and define transparent background colors to play well with other decorations. Example: `rgba(169,112,255,0.8)`.
+- `twitchCoder.highlightFontColor`: Font color of the decoration. Use `rgba()` and define transparent background colors to play well with other decorations. Example: `white`.
+- `twitchCoder.highlightBorder`: CSS border styling property that will be applied to text enclosed by a decoration. Example: `1px solid #d7bdff`.
+- `twitchCoder.autoConnect`: Whether or not the chat bot should try connecting automatically when VS Code starts.
+- `twitchCoder.announceBot`: Whether or not the chat bot should announce its joining or leaving the chat room.
+- `twitchCoder.joinMessage`: The message the chat bot will say when joining a chat room.
+- `twitchCoder.leaveMessage`: The message the chat bot will say when leaving a chat room.
+- `twitchCoder.usageTip`: A tip shared by the bot when a user chats: `!highlight` or `!line`.
+- `twitchCoder.requiredBadges`: A list of badges required to use the highlighter command. The use must have at least one of these badges to use the command. Leave blank for no requirement. Example: `moderator, subscriber, vip`.
+- `twitchCoder.switchActiveTab`: Allow incoming highlight to switch the currently active editor tab.
+- `twitchCoder.showHighlightsInActivityBar`: Show the Highlights icon in the activity bar to display the tree view.
+- `twitchCoder.unhighlightOnDisconnect`: Whether or not unhighlight all lines when disconnected from the chat service.
 
 ## 👥 Attribution
 
