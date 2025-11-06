@@ -1,7 +1,8 @@
 out
 node_modules
 tests-out
-.vscode-test/
+.idea
+.vscode-test
 *.vsix
 .dccache
-.TODO.md
+TODO.md
