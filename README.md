@@ -21,13 +21,13 @@
 
 </div>
 
-A VS Code extension to allow your Twitch viewers to help in spotting bugs, typos, etc. by sending a command in chat that will highlight the line of code they want you to check.
+A VS Code extension that lets your Twitch viewers help spot bugs, typos, and more by sending chat commands that highlight lines of code.
 
 <img width="1677" height="641" alt="screenshot" src="https://github.com/user-attachments/assets/b8438410-b8ea-44bb-86ef-e7e2e8de20e3" />
 
 ## 🔧 Requirements
 
-In order to use this extension you will need the following things before going to the "Getting Started" section.
+To use this extension, you will need:
 
 - An installed version of [VS Code](https://code.visualstudio.com/)
 - A Twitch account for yourself or a separate one to be used as a chat bot ([sign up here](https://www.twitch.tv/signup))
@@ -35,58 +35,59 @@ In order to use this extension you will need the following things before going t
 ## 🚀 Getting Started
 
 1. Install the extension from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Simek.vscode-twitch-coder) or [Open VSX](https://open-vsx.org/extension/simek/vscode-twitch-coder).
-2. Open your VS Code Settings
+2. Open your VS Code Settings and type in "twitch" into the search bar.
 
-   > You can press `CTRL/CMD + ,` or navigate via menus File -> Perferences -> Settings.
+   > You can press <kbd>CTRL/CMD</kbd> + <kbd>,</kbd>, or navigate via menus **File -> Perferences -> Settings**.
 
-3. Type in "twitch" into the search bar
-4. Find the `Twitch Coder: Channels` setting and enter the name of the channel(s) to which you'd like the extension to connect.
+3. Find the `Twitch Coder: Channels` setting and enter the name of the channel(s) to which you'd like the extension to connect.
 
    > If you'd like to connect to more than one channel separate them by commas `,`, for example: `simek,dev_spajus`.
 
-5. Find the `Twitch Coder: Nickname` setting. If you are using your own account for the chat bot then enter your account username as the value here. If you created a separate account use that username. Save your changes.
-6. Make sure you're logged in to the Twitch account you wish to authorize the highlighter bot to access in your default browser.
-7. In the status bar, click the "Twitch" button. After clicking it, you'll see a notification that the extension wants to open a URL.
-8. Choose the "Open" option which should open a new tab of your default browser.
-9. Read through the permissions that are being requested for use of this bot/extension and choose "Authorize". You will be notified that you can close the browser/tab.
-11. Go back to VS Code and you should now see "Disconnected" in the status bar. Click on it to connect the bot to chat and start listening for highlight commands.
+4. Find the `Twitch Coder: Nickname` setting. If you are using your own account for the chat bot, enter your account username here. If you created a separate account, use that username. Save your changes.
+5. Make sure you're logged in to the Twitch account you wish to authorize the highlighter bot to access in your default browser.
+6. In the status bar, click the "Twitch" button. After clicking it, you'll see a notification that the extension wants to open a URL.
+7. Choose the "Open" option which should open a new tab of your default browser.
+8. Review the permissions requested by the bot/extension and choose "Authorize". You will be notified that you can close the browser tab.
+9. Return to VS Code. You should now see "Disconnected" in the Status Bar. Click it to connect the bot to chat and start listening for highlight commands.
 
 ## 💬 Twitch Commands
 
 To highlight a line, use:
 
-```
-!highlight <LineNumber> OR !line <LineNumber>
+```sh
+!highlight <LineNumber>
+# OR
+!line <LineNumber>
 ```
 
 To unhighlight a line, use:
 
-```
+```sh
 !line !<LineNumber>
 ```
 
 To highlight multiple lines, use the same syntax as above but include a range of lines to highlight:
 
-```
+```sh
 !line <StartLineNumber>-<EndLineNumber>
 ```
 
 Additionally, you can also include comments:
 
-```
-!line <LineNumber> This is a test comment
+```sh
+!line <LineNumber> This is an example comment
 ```
 
 Or highlight the line in one of opened tabs, which is not in active (it also works with comment and line ranges):
 
-```
-!line <LineNumber> <FileName> This is a test comment
+```sh
+!line <LineNumber> <FileName> This is an example comment
 ```
 
 ## ⚙️ Extension Settings
 
 - `twitchCoder.channels`: A comma separated list of channel name(s) to connect to on Twitch. Example: `simek` or for multiple channels: `simek, dev_spajus`.
-- `twitchCoder.nickname`: The username the chat bot should use when joining a Twitch channel.
+- `twitchCoder.nickname`: The username the chat bot should use when joining a Twitch channel. If empty, your Twitch user will be used.
 
   > Note: this is required if you'd like to have the bot send join/leave messages in your chat. It also needs to match the Twitch username with which you generated the OAuth token.
 

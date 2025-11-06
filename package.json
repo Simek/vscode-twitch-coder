@@ -1,7 +1,7 @@
 {
   "name": "vscode-twitch-coder",
   "displayName": "Twitch Coder",
-  "description": "Allow viewers to interact with your VS Code editor.",
+  "description": "A VS Code extension that lets your Twitch viewers help spot bugs, typos, and more by sending chat commands that highlight lines of code.",
   "version": "0.3.3",
   "preview": false,
   "publisher": "simek",
@@ -24,7 +24,7 @@
     "vscode:test": "bun vscode:test-prepare && bun vscode-test",
     "vscode:test-prepare": "rimraf ./tests-out && tsc -p ./ --outDir ./tests-out",
     "package": "bun vsce package --allow-star-activation",
-    "format": "bunx oxlint --type-aware --fix && bun prettier . --write --experimental-cli",
+    "format": "bunx oxlint --type-aware && bun prettier . --write --experimental-cli",
     "compile": "rimraf ./out && tsc -p ./ --noEmit && copyfiles -au 1 ./src/**/*.html out/ && bun bundle",
     "bundle": "esbuild src/extension.ts --outdir=out --format=cjs --platform=node --minify --external:vscode --bundle"
   },
@@ -39,12 +39,12 @@
     "@vscode/test-electron": "^2.5.2",
     "@vscode/vsce": "^3.6.2",
     "copyfiles": "^2.3.0",
-    "esbuild": "^0.25.11",
+    "esbuild": "^0.25.12",
     "glob": "^11.0.3",
-    "oxlint": "^1.23.0",
-    "oxlint-tsgolint": "^0.2.0",
+    "oxlint": "^1.26.0",
+    "oxlint-tsgolint": "^0.2.1",
     "prettier": "3.6.2",
-    "rimraf": "^6.0.1",
+    "rimraf": "^6.1.0",
     "typescript": "5.9.3"
   },
   "optionalDependencies": {
@@ -250,7 +250,7 @@
         "twitchCoder.nickname": {
           "type": "string",
           "default": "",
-          "description": "The username the chat bot should use when joining a Twitch channel."
+          "description": "The username the chat bot should use when joining a Twitch channel. If empty, your Twitch user will be used."
         },
         "twitchCoder.switchActiveTab": {
           "type": "boolean",
