@@ -23,7 +23,7 @@
 
 A VS Code extension that lets your Twitch viewers help spot bugs, typos, and more by sending chat commands that highlight lines of code.
 
-<img width="1677" height="641" alt="screenshot" src="https://github.com/user-attachments/assets/b8438410-b8ea-44bb-86ef-e7e2e8de20e3" />
+<img width="1677" alt="Extension screenshot" src="https://github.com/user-attachments/assets/b8438410-b8ea-44bb-86ef-e7e2e8de20e3" />
 
 ## 🔧 Requirements
 
