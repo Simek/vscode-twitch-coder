@@ -4,7 +4,20 @@
 
 # Twitch Coder VS Code Extension
 
-[![Build and Test](https://github.com/Simek/vscode-twitch-coder/actions/workflows/build-and-test.yml/badge.svg?branch=main)](https://github.com/Simek/vscode-twitch-coder/actions/workflows/build-and-test.yml)
+<p align="center">
+  <a aria-label="Latest release" href="https://github.com/Simek/vscode-twitch-coder/blob/main/CHANGELOG.md" target="_blank">
+    <img alt="Latest release" src="https://img.shields.io/github/package-json/v/Simek/vscode-twitch-coder?style=flat-square&color=0366D6&labelColor=49505A" />
+  </a>
+  <a aria-label="Workflow status" href="https://github.com/Simek/vscode-twitch-coder/actions" target="_blank">
+    <img alt="Workflow status" src="https://img.shields.io/github/actions/workflow/status/Simek/vscode-twitch-coder/build-and-test.yml?branch=main&style=flat-square&labelColor=49505A" />
+  </a>
+  <a aria-label="Install from VS Code Marketplace" href="https://marketplace.visualstudio.com/items?itemName=Simek.vscode-twitch-coder" target="_blank">
+    <img alt="Install from VS Code Marketplace" src="https://img.shields.io/badge/marketplace-25292E?style=flat-square&label=%20&labelColor=49505A&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MDAiIGhlaWdodD0iODAwIiB2aWV3Qm94PSIwIDAgMzIgMzIiIGZpbGw9IiNCQ0MzQ0QiPjxwYXRoIGQ9Ik0zMC44NjUgMy40NDggMjQuMjgyLjI4MWExLjk5IDEuOTkgMCAwIDAtMi4yNzYuMzg1TDkuMzk3IDEyLjE3MSAzLjkwMiA4LjAwNGExLjMzIDEuMzMgMCAwIDAtMS43MDMuMDczTC40MzkgOS42ODFhMS4zMyAxLjMzIDAgMCAwLS4wMDUgMS45NjlMNS4yIDE1Ljk5OS40MzQgMjAuMzQ4YTEuMzMgMS4zMyAwIDAgMCAuMDA1IDEuOTY5bDEuNzYgMS42MDRhMS4zMyAxLjMzIDAgMCAwIDEuNzAzLjA3M2w1LjQ5NS00LjE3MiAxMi42MTUgMTEuNTFhMS45OCAxLjk4IDAgMCAwIDIuMjcxLjM4NWw2LjU4OS0zLjE3MmExLjk5IDEuOTkgMCAwIDAgMS4xMy0xLjgwMlY1LjI0OGMwLS43NjYtLjQ0My0xLjQ2OS0xLjEzNS0xLjgwMnptLTYuODYgMTkuODE4TDE0LjQzMiAxNmw5LjU3My03LjI2NnoiLz48L3N2Zz4=" />
+  </a>
+  <a aria-label="Install from Open VSX" href="https://open-vsx.org/extension/simek/vscode-twitch-coder" target="_blank">
+    <img alt="Install from Open VSX" src="https://img.shields.io/badge/vscode-open%20vsx-25292E?style=flat-square&label=%20&logoColor=BCC3CD&labelColor=49505A&logo=Eclipse%20IDE" />
+  </a>
+</p>
 
 </div>
 
