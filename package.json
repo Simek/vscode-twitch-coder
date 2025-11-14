@@ -37,18 +37,18 @@
     "@types/vscode": "^1.104.0",
     "@vscode/test-cli": "^0.0.12",
     "@vscode/test-electron": "^2.5.2",
-    "@vscode/vsce": "^3.6.2",
+    "@vscode/vsce": "^3.7.0",
     "copyfiles": "^2.3.0",
-    "esbuild": "^0.25.12",
+    "esbuild": "^0.27.0",
     "glob": "^11.0.3",
-    "oxlint": "^1.26.0",
-    "oxlint-tsgolint": "^0.2.1",
+    "oxlint": "^1.28.0",
+    "oxlint-tsgolint": "^0.6.0",
     "prettier": "3.6.2",
     "rimraf": "^6.1.0",
     "typescript": "5.9.3"
   },
-  "optionalDependencies": {
-    "keytar": "^7.9.0"
+  "patchedDependencies": {
+    "tmi.js@1.8.5": "patches/tmi.js@1.8.5.patch"
   },
   "contributes": {
     "commands": [
@@ -305,8 +305,5 @@
         }
       }
     }
-  },
-  "patchedDependencies": {
-    "tmi.js@1.8.5": "patches/tmi.js@1.8.5.patch"
   }
 }
