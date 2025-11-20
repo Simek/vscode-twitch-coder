@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## 🚧 Unreleased
 
+### 0.4.0 - 2025.11.20
+
+- Decorate tabs and files in the File Explorer tree view when they contain active highlights.
+
 ## Released
 
 ### 0.3.5 - 2025.11.06

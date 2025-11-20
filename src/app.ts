@@ -10,6 +10,7 @@ import { parseMessage } from './utils';
 export class App implements vscode.Disposable {
   private readonly _highlightManager: HighlightManager;
   private readonly _highlightTreeDataProvider: HighlightTreeDataProvider;
+  private readonly _fileDecoractionEmitter: vscode.EventEmitter<vscode.Uri | vscode.Uri[] | undefined>;
   private log: log;
   private highlightDecorationType: vscode.TextEditorDecorationType;
   private currentDocument?: vscode.TextDocument;
@@ -23,6 +24,7 @@ export class App implements vscode.Disposable {
     this._highlightTreeDataProvider = new HighlightTreeDataProvider(
       this._highlightManager.GetHighlightCollection.bind(this._highlightManager)
     );
+    this._fileDecoractionEmitter = new vscode.EventEmitter<vscode.Uri | vscode.Uri[] | undefined>();
   }
 
   public intialize(context: vscode.ExtensionContext) {
@@ -36,6 +38,8 @@ export class App implements vscode.Disposable {
 
       vscode.workspace.onDidChangeTextDocument(this.onDidChangeTextDocumentHandler, this),
       vscode.workspace.onDidChangeConfiguration(this.onDidChangeConfigurationHandler, this),
+
+      vscode.window.registerFileDecorationProvider(this.fileDecorationProvider),
 
       vscode.window.registerTreeDataProvider('twitchCoderTreeView-explorer', this._highlightTreeDataProvider),
       vscode.window.registerTreeDataProvider('twitchCoderTreeView-debug', this._highlightTreeDataProvider),
@@ -176,6 +180,7 @@ export class App implements vscode.Disposable {
 
   private onHighlightChangedHandler(): void {
     this.refresh();
+    this._fileDecoractionEmitter.fire(undefined);
   }
 
   private get isActiveTextEditor(): boolean {
@@ -361,5 +366,18 @@ export class App implements vscode.Disposable {
       const lineNumber = vscode.window.activeTextEditor.selection.active.line;
       this._highlightManager.Remove(vscode.window.activeTextEditor.document, 'self', lineNumber + 1);
     }
+  }
+
+  private get fileDecorationProvider(): vscode.FileDecorationProvider {
+    return {
+      onDidChangeFileDecorations: this._fileDecoractionEmitter.event,
+      provideFileDecoration: (uri: vscode.Uri): vscode.FileDecoration | undefined => {
+        const decorations = this._highlightManager.GetDecorations(uri.fsPath);
+        if (decorations.length > 0) {
+          return new vscode.FileDecoration('●', 'File has highlighted lines', new vscode.ThemeColor('charts.purple'));
+        }
+        return undefined;
+      },
+    };
   }
 }
