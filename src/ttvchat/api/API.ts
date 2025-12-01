@@ -15,10 +15,7 @@ export class API {
     const res = await fetch(url, {
       headers: { Accept: 'application/json' },
     });
-    if (res.status !== 200) {
-      return false;
-    }
-    return true;
+    return res.status === 200;
   }
 
   /**

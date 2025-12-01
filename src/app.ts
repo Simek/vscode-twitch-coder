@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import { type HighlighterAPI } from './api';
 import { AppContexts, Commands, Configuration, LogLevel, Settings } from './enums';
 import { HighlightManager, HighlightTreeDataProvider, type HighlightTreeItem } from './highlight';
-import { Logger, type log } from './logger';
+import { type log, Logger } from './logger';
 import { parseMessage } from './utils';
 
 export class App implements vscode.Disposable {
@@ -97,7 +97,7 @@ export class App implements vscode.Disposable {
     if (event.document.languageId === 'Log') {
       return;
     }
-    // Determine if the change occured on a highlighted line, if it did then adjust the highlight.
+    // Determine if the change occurred on a highlighted line, if it did then adjust the highlight.
     event.contentChanges.forEach((valueChanged) => {
       this._highlightManager.UpdateHighlight(event.document, valueChanged);
     });
@@ -134,8 +134,7 @@ export class App implements vscode.Disposable {
    */
   private setEditorHasHighlightsContext() {
     if (vscode.window.activeTextEditor) {
-      const editor = vscode.window.activeTextEditor;
-      if (this._highlightManager.GetDecorations(editor.document.fileName).length > 0) {
+      if (this._highlightManager.GetDecorations(vscode.window.activeTextEditor.document.fileName).length > 0) {
         vscode.commands.executeCommand('setContext', AppContexts.editorHasHighlights, true);
       } else {
         vscode.commands.executeCommand('setContext', AppContexts.editorHasHighlights, false);
