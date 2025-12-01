@@ -1,11 +1,11 @@
 import {
-  DecorationOptions,
-  Event,
+  type DecorationOptions,
+  type Event,
   EventEmitter,
   Position,
   Range,
-  TextDocument,
-  TextDocumentContentChangeEvent,
+  type TextDocument,
+  type TextDocumentContentChangeEvent,
 } from 'vscode';
 
 import { Highlight } from './Highlight';

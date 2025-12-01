@@ -1,11 +1,11 @@
-import { Badges, ChatUserstate, Client, Options } from 'tmi.js';
+import { type Badges, type ChatUserstate, Client, type Options } from 'tmi.js';
 import {
-  ConfigurationChangeEvent,
-  Disposable,
-  Event,
+  type ConfigurationChangeEvent,
+  type Disposable,
+  type Event,
   EventEmitter,
-  ExtensionContext,
-  WorkspaceConfiguration,
+  type ExtensionContext,
+  type WorkspaceConfiguration,
   commands,
   window,
   workspace,
@@ -14,7 +14,7 @@ import {
 import { API } from './api/API';
 import CredentialManager from '../credentialManager';
 import { Configuration, LogLevel, SecretKeys, Settings } from '../enums';
-import { log } from '../logger';
+import { type log } from '../logger';
 
 type BadgesType = Badges & {
   follower: string;
@@ -155,7 +155,7 @@ export class ChatClient implements Disposable {
     }
 
     const badges = (userState.badges as BadgesType) || {};
-    badges.follower = (await API.isUserFollowingChannel(userState.id!, channel)) === true ? '1' : '0';
+    badges.follower = (await API.isUserFollowingChannel(userState.id!, channel)) ? '1' : '0';
 
     if (this.requiredBadges.length > 0 && !badges.broadcaster) {
       // Check to ensure the user has a required badge

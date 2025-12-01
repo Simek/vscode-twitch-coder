@@ -1,11 +1,11 @@
-import * as vscode from 'vscode';
+import { type ExtensionContext } from 'vscode';
 
 const PREFIX: string = 'vscode-twitch-coder';
 
 export default class CredentialManager {
-  private static context: vscode.ExtensionContext | null = null;
+  private static context: ExtensionContext | null = null;
 
-  public static setup(ctx: vscode.ExtensionContext) {
+  public static setup(ctx: ExtensionContext) {
     this.context = ctx;
   }
 

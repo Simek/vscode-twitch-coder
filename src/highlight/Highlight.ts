@@ -1,9 +1,9 @@
-import { Range } from 'vscode';
+import { type Range } from 'vscode';
 
 export class Highlight {
-  private _userName: string;
+  private readonly _userName: string;
+  private readonly _comments?: string;
   private _range: Range;
-  private _comments?: string;
 
   constructor(userName: string, range: Range, comments?: string) {
     this._userName = userName;

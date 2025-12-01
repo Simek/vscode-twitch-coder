@@ -1,17 +1,17 @@
-import * as path from 'path';
+import * as path from 'node:path';
 import * as vscode from 'vscode';
 
-import { HighlighterAPI } from './api';
+import { type HighlighterAPI } from './api';
 import { AppContexts, Commands, Configuration, LogLevel, Settings } from './enums';
-import { HighlightManager, HighlightTreeDataProvider, HighlightTreeItem } from './highlight';
-import { Logger, log } from './logger';
+import { HighlightManager, HighlightTreeDataProvider, type HighlightTreeItem } from './highlight';
+import { Logger, type log } from './logger';
 import { parseMessage } from './utils';
 
 export class App implements vscode.Disposable {
   private readonly _highlightManager: HighlightManager;
   private readonly _highlightTreeDataProvider: HighlightTreeDataProvider;
-  private readonly _fileDecoractionEmitter: vscode.EventEmitter<vscode.Uri | vscode.Uri[] | undefined>;
-  private log: log;
+  private readonly _fileDecorationEmitter: vscode.EventEmitter<vscode.Uri | vscode.Uri[] | undefined>;
+  private readonly log: log;
   private highlightDecorationType: vscode.TextEditorDecorationType;
   private currentDocument?: vscode.TextDocument;
   private config?: vscode.WorkspaceConfiguration;
@@ -24,10 +24,10 @@ export class App implements vscode.Disposable {
     this._highlightTreeDataProvider = new HighlightTreeDataProvider(
       this._highlightManager.GetHighlightCollection.bind(this._highlightManager)
     );
-    this._fileDecoractionEmitter = new vscode.EventEmitter<vscode.Uri | vscode.Uri[] | undefined>();
+    this._fileDecorationEmitter = new vscode.EventEmitter<vscode.Uri | vscode.Uri[] | undefined>();
   }
 
-  public intialize(context: vscode.ExtensionContext) {
+  public initialize(context: vscode.ExtensionContext) {
     this.log('Initializing line highlighter...');
 
     context.subscriptions.push(
@@ -180,7 +180,7 @@ export class App implements vscode.Disposable {
 
   private onHighlightChangedHandler(): void {
     this.refresh();
-    this._fileDecoractionEmitter.fire(undefined);
+    this._fileDecorationEmitter.fire(undefined);
   }
 
   private get isActiveTextEditor(): boolean {
@@ -370,7 +370,7 @@ export class App implements vscode.Disposable {
 
   private get fileDecorationProvider(): vscode.FileDecorationProvider {
     return {
-      onDidChangeFileDecorations: this._fileDecoractionEmitter.event,
+      onDidChangeFileDecorations: this._fileDecorationEmitter.event,
       provideFileDecoration: (uri: vscode.Uri): vscode.FileDecoration | undefined => {
         const decorations = this._highlightManager.GetDecorations(uri.fsPath);
         if (decorations.length > 0) {

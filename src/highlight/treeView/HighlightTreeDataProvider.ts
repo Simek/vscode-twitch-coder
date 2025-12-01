@@ -1,8 +1,8 @@
-import { basename } from 'path';
-import { Event, EventEmitter, TreeDataProvider, TreeItem, TreeItemCollapsibleState } from 'vscode';
+import { basename } from 'node:path';
+import { type Event, EventEmitter, type TreeDataProvider, type TreeItem, TreeItemCollapsibleState } from 'vscode';
 
+import { type HighlightCollection } from '../HighlightManager';
 import { HighlightTreeItem } from './HighlightTreeItem';
-import { HighlightCollection } from '../HighlightManager';
 import { naturalCompare } from '../../utils';
 
 export class HighlightTreeDataProvider implements TreeDataProvider<HighlightTreeItem> {

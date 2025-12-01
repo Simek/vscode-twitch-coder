@@ -1,6 +1,6 @@
-export const naturalCompare = (a: any, b: any) => {
-  let ax: any[] = [],
-    bx: any[] = [];
+export function naturalCompare(a: any, b: any) {
+  let ax: any[] = [];
+  let bx: any[] = [];
 
   a.replace(/(\d+)|(\D+)/g, function (_: any, $1: any, $2: any) {
     ax.push([$1 || Infinity, $2 || '']);
@@ -20,4 +20,4 @@ export const naturalCompare = (a: any, b: any) => {
   }
 
   return ax.length - bx.length;
-};
+}

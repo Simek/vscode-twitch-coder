@@ -1,20 +1,20 @@
 import * as vscode from 'vscode';
 
 import { AuthenticationService } from './AuthenticationService';
-import { ChatClient, ChatClientMessageReceivedEvent } from './ChatClient';
+import { ChatClient, type ChatClientMessageReceivedEvent } from './ChatClient';
 import { Commands, Configuration, Settings } from '../enums';
-import { HighlighterAPI } from '../index';
-import { Logger, log } from '../logger';
+import { type HighlighterAPI } from '../api';
+import { Logger, type log } from '../logger';
 import { parseMessage } from '../utils';
 
 export class TwitchChatService implements vscode.Disposable {
   private readonly _api: HighlighterAPI;
   private readonly _authenticationService: AuthenticationService;
 
-  private log: log;
-  private loginStatusBarItem: vscode.StatusBarItem;
-  private chatClientStatusBarItem: vscode.StatusBarItem;
-  private chatClient: ChatClient;
+  private readonly log: log;
+  private readonly loginStatusBarItem: vscode.StatusBarItem;
+  private readonly chatClientStatusBarItem: vscode.StatusBarItem;
+  private readonly chatClient: ChatClient;
   private config?: vscode.WorkspaceConfiguration;
 
   constructor(context: vscode.ExtensionContext, api: HighlighterAPI, outputChannel: vscode.OutputChannel) {

@@ -1,6 +1,6 @@
-import { Command, TreeItem, TreeItemCollapsibleState } from 'vscode';
+import { type Command, TreeItem, TreeItemCollapsibleState } from 'vscode';
 
-import { Highlight } from '../Highlight';
+import { type Highlight } from '../Highlight';
 import { Commands } from '../../enums';
 
 export class HighlightTreeItem extends TreeItem {

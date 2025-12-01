@@ -1,14 +1,14 @@
-import { readFile, readFileSync } from 'fs';
-import * as http from 'http';
-import { join } from 'path';
-import { randomUUID } from 'crypto';
-import { Event, EventEmitter, Uri, env, extensions, window } from 'vscode';
+import { readFile, readFileSync } from 'node:fs';
+import * as http from 'node:http';
+import { join } from 'node:path';
+import { randomUUID } from 'node:crypto';
+import { type Event, EventEmitter, Uri, env, extensions, window } from 'vscode';
 
 import { API } from './api/API';
 import CredentialManager from '../credentialManager';
 import { extensionId } from '../constants';
 import { LogLevel, SecretKeys, TwitchKeys } from '../enums';
-import { log } from '../logger';
+import { type log } from '../logger';
 
 export class AuthenticationService {
   private readonly _onAuthStatusChanged: EventEmitter<boolean> = new EventEmitter();
@@ -41,7 +41,7 @@ export class AuthenticationService {
     const accessToken = await CredentialManager.getSecret(SecretKeys.account);
     if (!accessToken) {
       const state = randomUUID();
-      await this.createServer(state);
+      this.createServer(state);
 
       env.openExternal(
         Uri.parse(
@@ -73,7 +73,7 @@ export class AuthenticationService {
     this._onAuthStatusChanged.fire(false);
   }
 
-  private async createServer(state: string) {
+  private createServer(state: string) {
     const filePath = join(extensions.getExtension(extensionId)!.extensionPath, 'out', 'ttvchat', 'login', 'index.html');
 
     this.log(LogLevel.Debug, `Starting login server using filePath: ${filePath}.`);
@@ -84,14 +84,14 @@ export class AuthenticationService {
         const url = new URL(req.url, `http://localhost:${this.port}`);
 
         const { path, query } = Uri.parse(url.toString(), true);
-        const queryParmas = new URLSearchParams(query);
+        const queryParams = new URLSearchParams(query);
 
         if (req.url === '/') {
           res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
           res.end(file);
           return;
         } else if (path === '/oauth') {
-          const accessToken = queryParmas.get('access_token');
+          const accessToken = queryParams.get('access_token');
 
           if (!accessToken) {
             res.writeHead(500, 'Error while logging in. Access token missing.');
@@ -99,7 +99,7 @@ export class AuthenticationService {
             return;
           }
 
-          if (queryParmas.get('state') !== state) {
+          if (queryParams.get('state') !== state) {
             window.showErrorMessage('Error while logging in. State mismatch error.');
             await API.revokeToken(accessToken);
             this._onAuthStatusChanged.fire(false);

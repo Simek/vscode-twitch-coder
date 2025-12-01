@@ -17,7 +17,7 @@ export async function activate(context: vscode.ExtensionContext) {
   app = new App(outputChannel);
   ttvchat = new TwitchChatService(context, app.API, outputChannel);
 
-  app.intialize(context);
+  app.initialize(context);
   await ttvchat.initialize(context);
 
   return app.API;

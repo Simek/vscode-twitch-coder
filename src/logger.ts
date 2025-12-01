@@ -1,4 +1,4 @@
-import { OutputChannel } from 'vscode';
+import { type OutputChannel } from 'vscode';
 
 import { LogLevel } from './enums';
 import { isEnum } from './utils';
@@ -14,6 +14,10 @@ export class Logger {
   constructor(outputChannel?: OutputChannel, thisArgs?: any) {
     this._channel = outputChannel;
     this.log = this.log.bind(thisArgs || this);
+  }
+
+  private appendPrefix(value: number): string {
+    return value < 10 ? `0${value}` : `${value}`;
   }
 
   public log(message: string, ...optionalParams: any[]): void;
@@ -37,13 +41,10 @@ export class Logger {
       const hours = date.getHours();
       const minutes = date.getMinutes();
       const seconds = date.getSeconds();
-      const prefix = (value: number): string => {
-        return value < 10 ? `0${value}` : `${value}`;
-      };
       return {
-        hours: prefix(hours),
-        minutes: prefix(minutes),
-        seconds: prefix(seconds),
+        hours: this.appendPrefix(hours),
+        minutes: this.appendPrefix(minutes),
+        seconds: this.appendPrefix(seconds),
       };
     };
 

@@ -1,9 +1,28 @@
 {
   "rules": {
     "always-return": "error",
+    "func-style": ["error", "declaration"],
+    "no-cycle": "error",
+    "no-multi-assign": "error",
     "no-useless-call": "error",
+    "no-useless-concat": "error",
     "no-useless-escape": "off",
-    "import/no-cycle": "error",
-    "typescript/unbound-method": "off"
+    "typescript/consistent-type-imports": [
+      "error",
+      {
+        "fixStyle": "inline-type-imports"
+      }
+    ],
+    "typescript/no-unnecessary-boolean-literal-compare": "error",
+    "typescript/no-unnecessary-type-arguments": "error",
+    "typescript/no-unnecessary-type-assertion": "error",
+    "typescript/require-await": "error",
+    "typescript/unbound-method": "off",
+    "unicorn/prefer-array-find": "error",
+    "unicorn/prefer-array-flat": "error",
+    "unicorn/prefer-array-flat-map": "error",
+    "unicorn/prefer-array-some": "error",
+    "unicorn/prefer-node-protocol": "error",
+    "unicorn/no-unnecessary-await": "error"
   }
 }
