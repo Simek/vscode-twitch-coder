@@ -27,9 +27,11 @@ export class API {
     const res = await fetch(url, {
       headers: { Authorization: `OAuth ${token}` },
     });
+
     if (res.status !== 200) {
       return { valid: false, login: '' };
     }
+
     const json = (await res.json()) as { login: string };
     return { valid: true, login: json.login };
   }

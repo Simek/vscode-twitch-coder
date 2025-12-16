@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 ## Released
 
+### 0.4.1 - 2025.12.16
+
+- Correctly handle expired Twitch token cleanup when bootstraping the extension.
+
 ### 0.4.0 - 2025.11.20
 
 - Decorate tabs and files in the File Explorer tree view when they contain active highlights.

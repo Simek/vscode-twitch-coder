@@ -8,12 +8,5 @@
   "endOfLine": "crlf",
   "printWidth": 120,
   "bracketSpacing": true,
-  "ignorePatterns": [
-    ".idea",
-    ".vscode-test",
-    "node_modules",
-    "out",
-    "tests-out",
-    "*.vsix"
-  ]
+  "ignorePatterns": [".idea", ".vscode-test", "node_modules", "out", "tests-out", "*.vsix", "package.json"]
 }

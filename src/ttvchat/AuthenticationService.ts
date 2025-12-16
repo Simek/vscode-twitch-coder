@@ -30,8 +30,14 @@ export class AuthenticationService {
 
   // https://dev.twitch.tv/docs/authentication#validating-requests
   public async validateToken(accessToken: string) {
-    await API.validateToken(accessToken);
+    const { valid } = await API.validateToken(accessToken);
     this._onAuthStatusChanged.fire(true);
+
+    if (!valid) {
+      await this.signOutHandler();
+      return;
+    }
+
     this.log('Twitch access token has been validated.');
     const hour = 1000 * 60 * 60;
     setInterval(this.validateToken, hour, accessToken); // Validate the token each hour

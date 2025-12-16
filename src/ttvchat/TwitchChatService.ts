@@ -73,8 +73,8 @@ export class TwitchChatService implements vscode.Disposable {
       vscode.commands.registerCommand(Commands.disconnect, this.chatClient.disconnect, this.chatClient)
     );
 
-    await this.chatClient.initialize(context);
     await this._authenticationService.initialize();
+    await this.chatClient.initialize(context);
 
     this.log('ttvchat initialized.');
   }
