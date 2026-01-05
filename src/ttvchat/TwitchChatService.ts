@@ -128,8 +128,9 @@ export class TwitchChatService implements vscode.Disposable {
   }
 
   private onChatClientMessageReceivedHandler(event: ChatClientMessageReceivedEvent) {
-    const userName = event.userState.username!;
+    const userName = event.userState['display-name'] ?? event.userState.username ?? 'Twitch user';
     const result = parseMessage(event.message);
+    console.warn('Parsed message from', userName, ':', result);
     if (result) {
       if (result.highlight) {
         this._api.requestHighlight(

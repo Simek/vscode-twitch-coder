@@ -116,6 +116,7 @@ export class App implements vscode.Disposable {
     this.config = vscode.workspace.getConfiguration(Configuration.sectionIdentifier);
     this.highlightDecorationType = this.createTextEditorDecorationType();
     this.refresh();
+    this._fileDecorationEmitter.fire(undefined); // refresh file decorations when settings change
   }
 
   private onDidChangeVisibleTextEditorsHandler(editors: readonly vscode.TextEditor[]): any {
@@ -373,7 +374,10 @@ export class App implements vscode.Disposable {
       provideFileDecoration: (uri: vscode.Uri): vscode.FileDecoration | undefined => {
         const decorations = this._highlightManager.GetDecorations(uri.fsPath);
         if (decorations.length > 0) {
-          return new vscode.FileDecoration('●', 'File has highlighted lines', new vscode.ThemeColor('charts.purple'));
+          const rawBadge = this.config?.get<string>(Settings.fileDecorationBadge);
+          const badge = rawBadge ? rawBadge.trim() : '';
+
+          return new vscode.FileDecoration(badge, 'File has highlighted lines', new vscode.ThemeColor('charts.purple'));
         }
         return undefined;
       },

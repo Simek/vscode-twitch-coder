@@ -41,9 +41,9 @@
     "copyfiles": "^2.3.0",
     "esbuild": "^0.27.2",
     "glob": "^13.0.0",
-    "oxfmt": "^0.20.0",
-    "oxlint": "^1.35.0",
-    "oxlint-tsgolint": "^0.10.0",
+    "oxfmt": "^0.22.0",
+    "oxlint": "^1.37.0",
+    "oxlint-tsgolint": "^0.10.1",
     "rimraf": "^6.1.2",
     "typescript": "5.9.3"
   },
@@ -302,6 +302,11 @@
           "type": "string",
           "default": "💡 To use the line highlight command, type in the following format: `!line <number>` 🟣 for multiple lines: `!line <start>-<end>` 🟣 with a comment: `!line <number> <comment>` 🟣 for inactive, but open file: `!line <fileName> <number> <comment>`",
           "description": "A tip shared by the bot when a user chats: `!line` or `!highlight`."
+        },
+        "twitchCoder.fileDecorationBadge": {
+          "type": "string",
+          "default": "💬",
+          "description": "The badge character to display on files with highlights in the tab and File Explorer."
         }
       }
     }

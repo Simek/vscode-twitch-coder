@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 ## 🚧 Unreleased
 
+- Add ability to set set custom badge for file with highlight or remove it entirely.
+- Use the correctly cased Twitch username in tooltips and debug logs.
+- Fix highlight of not-active tabs for files with multiple dots in the name.
+
 ## Released
 
 ### 0.4.1 - 2025.12.16

@@ -13,4 +13,5 @@ export enum Settings {
   'usageTip' = 'usageTip',
   'requiredBadges' = 'requiredBadges',
   'switchActiveTab' = 'switchActiveTab',
+  'fileDecorationBadge' = 'fileDecorationBadge',
 }

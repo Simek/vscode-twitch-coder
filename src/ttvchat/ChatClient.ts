@@ -163,7 +163,7 @@ export class ChatClient implements Disposable {
       if (!canContinue) {
         this.log(
           LogLevel.Warning,
-          `${userState.username} does not have any of the required badges to use the highlight command.`
+          `${userState['display-name']} does not have any of the required badges to use the highlight command.`
         );
         return;
       }

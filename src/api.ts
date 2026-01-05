@@ -6,7 +6,7 @@ export type HighlighterAPI = {
    * @param startLine The start line used to highlight.
    * @param endLine The end line of the highlight (only if highlighting multiple lines).
    * @param comments The comment to add to the highlight.
-   * @param fileName The name of opened file to highlight. Defaults to currently active editor.
+   * @param fileName The name of an opened file to highlight. Defaults to the currently active editor.
    */
   requestHighlight(
     service: string,

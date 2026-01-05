@@ -46,7 +46,7 @@ export class HighlightManager {
     if (idx > -1) {
       return this.highlightCollection[idx].highlights.map<DecorationOptions>((h) => {
         return {
-          hoverMessage: `From ${h.userName.startsWith('self:') ? 'me' : (h.userName.split(':').at(-1) ?? 'Twitch user')}: ${h.comments !== undefined ? h.comments : ''}`,
+          hoverMessage: `From ${h.userName.startsWith('self:') ? 'me' : (h.userName.split(':').at(-1) ?? 'Twitch user')}${h.comments ? `: ${h.comments}` : ''}`,
           range: h.range,
         };
       });

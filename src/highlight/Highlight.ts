@@ -20,13 +20,13 @@ export class Highlight {
   }
 
   // The textEditor start line is zero indexed.
-  // We adjust to match the editors line numbers as shown to the user.
+  // We adjust to match the editor line numbers as shown to the user.
   public get startLine(): number {
     return this._range.start.line + 1;
   }
 
   // The textEditor end line is zero indexed.
-  // We adjust to match the editors line numbers as shown to the user.
+  // We adjust to match the editor line numbers as shown to the user.
   public get endLine(): number {
     return this._range.end.line + 1;
   }
