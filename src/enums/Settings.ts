@@ -9,9 +9,9 @@ export enum Settings {
   'joinMessage' = 'joinMessage',
   'leaveMessage' = 'leaveMessage',
   'unhighlightOnDisconnect' = 'unhighlightOnDisconnect',
-  'showHighlightsInActivityBar' = 'showHighlightsInActivityBar',
   'usageTip' = 'usageTip',
   'requiredBadges' = 'requiredBadges',
   'switchActiveTab' = 'switchActiveTab',
   'fileDecorationBadge' = 'fileDecorationBadge',
+  'persistHighlights' = 'persistHighlights',
 }

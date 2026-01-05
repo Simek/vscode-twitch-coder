@@ -218,8 +218,7 @@
       "twitchCoder-explorer": [
         {
           "id": "twitchCoderTreeView",
-          "name": "Highlights",
-          "when": "config.twitchCoder.showHighlightsInActivityBar"
+          "name": "Highlights"
         }
       ]
     },
@@ -257,6 +256,11 @@
           "default": false,
           "description": "Whether or not allow the incoming highlight to switch the currently active editor tab."
         },
+        "twitchCoder.persistHighlights": {
+          "type": "boolean",
+          "default": true,
+          "description": "Persist highlights in the current workspace across VS Code reloads."
+        },
         "twitchCoder.autoConnect": {
           "type": "boolean",
           "default": false,
@@ -292,11 +296,6 @@
           "type": "boolean",
           "default": false,
           "description": "Whether or not unhighlight all lines when disconnected from the chat service."
-        },
-        "twitchCoder.showHighlightsInActivityBar": {
-          "type": "boolean",
-          "default": false,
-          "description": "Show the Highlights icon in the activity bar to display the tree view."
         },
         "twitchCoder.usageTip": {
           "type": "string",

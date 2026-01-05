@@ -15,6 +15,18 @@ export type HighlightCollection = {
   highlights: Highlight[];
 };
 
+export type PersistedHighlight = {
+  userName: string;
+  startLine: number;
+  endLine: number;
+  comments?: string;
+};
+
+export type PersistedHighlightCollection = {
+  fileName: string;
+  highlights: PersistedHighlight[];
+};
+
 export type HighlightChangedEvent = {};
 
 export class HighlightManager {
@@ -27,6 +39,51 @@ export class HighlightManager {
 
   public GetHighlightCollection(): HighlightCollection[] {
     return this.highlightCollection;
+  }
+
+  public Serialize(): PersistedHighlightCollection[] {
+    return this.highlightCollection.map((hc) => {
+      return {
+        fileName: hc.fileName,
+        highlights: hc.highlights.map((h) => ({
+          userName: h.userName,
+          startLine: h.startLine,
+          endLine: h.endLine,
+          comments: h.comments,
+        })),
+      };
+    });
+  }
+
+  public Load(serialized?: PersistedHighlightCollection[] | null): void {
+    if (!serialized || !Array.isArray(serialized)) {
+      this.highlightCollection = [];
+      return;
+    }
+
+    this.highlightCollection = serialized
+      .filter((hc) => typeof hc?.fileName === 'string' && Array.isArray(hc.highlights))
+      .map((hc) => {
+        const fileName = hc.fileName;
+        const highlights = hc.highlights
+          .filter(
+            (h) =>
+              typeof h?.userName === 'string' &&
+              Number.isFinite(h?.startLine) &&
+              Number.isFinite(h?.endLine)
+          )
+          .map((h) => {
+            const startLine = Math.max(1, Math.trunc(h.startLine));
+            const endLine = Math.max(1, Math.trunc(h.endLine));
+            const vStartLine = endLine < startLine ? endLine : startLine;
+            const vEndLine = endLine < startLine ? startLine : endLine;
+
+            const range = new Range(new Position(vStartLine - 1, 0), new Position(vEndLine - 1, 9999));
+            return new Highlight(h.userName, range, h.comments);
+          });
+
+        return { fileName, highlights };
+      });
   }
 
   public GetHighlightDetails(): string[] {

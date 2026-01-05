@@ -101,8 +101,8 @@ Or highlight the line in one of opened tabs, which is not in active (it also wor
 - `twitchCoder.usageTip`: A tip shared by the bot when a user chats: `!highlight` or `!line`.
 - `twitchCoder.requiredBadges`: A list of badges required to use the highlighter command. The use must have at least one of these badges to use the command. Leave blank for no requirement. Example: `moderator, subscriber, vip`.
 - `twitchCoder.switchActiveTab`: Whether or not allow the incoming highlight to switch the currently active editor tab.
-- `twitchCoder.showHighlightsInActivityBar`: Show the Highlights icon in the activity bar to display the tree view.
 - `twitchCoder.unhighlightOnDisconnect`: Whether or not unhighlight all lines when disconnected from the chat service.
+- `twitchCoder.persistHighlights`: Persist highlights in the current workspace across VS Code reloads.
 
 ## 👥 Attribution
 

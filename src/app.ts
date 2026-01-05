@@ -3,11 +3,18 @@ import * as vscode from 'vscode';
 
 import { type HighlighterAPI } from './api';
 import { AppContexts, Commands, Configuration, LogLevel, Settings } from './enums';
-import { HighlightManager, HighlightTreeDataProvider, type HighlightTreeItem } from './highlight';
+import {
+  HighlightManager,
+  HighlightTreeDataProvider,
+  type HighlightTreeItem,
+  type PersistedHighlightCollection,
+} from './highlight';
 import { type log, Logger } from './logger';
 import { parseMessage } from './utils';
 
 export class App implements vscode.Disposable {
+  private static readonly PERSIST_KEY = 'twitchCoder.persistedHighlights.v1';
+
   private readonly _highlightManager: HighlightManager;
   private readonly _highlightTreeDataProvider: HighlightTreeDataProvider;
   private readonly _fileDecorationEmitter: vscode.EventEmitter<vscode.Uri | vscode.Uri[] | undefined>;
@@ -15,6 +22,8 @@ export class App implements vscode.Disposable {
   private highlightDecorationType: vscode.TextEditorDecorationType;
   private currentDocument?: vscode.TextDocument;
   private config?: vscode.WorkspaceConfiguration;
+  private context?: vscode.ExtensionContext;
+  private persistTimer?: NodeJS.Timeout;
 
   constructor(outputChannel?: vscode.OutputChannel) {
     this.log = new Logger(outputChannel).log;
@@ -29,8 +38,10 @@ export class App implements vscode.Disposable {
 
   public initialize(context: vscode.ExtensionContext) {
     this.log('Initializing line highlighter...');
+    this.context = context;
 
     context.subscriptions.push(
+      this,
       this._highlightManager.onHighlightChanged(this.onHighlightChangedHandler, this),
 
       vscode.window.onDidChangeVisibleTextEditors(this.onDidChangeVisibleTextEditorsHandler, this),
@@ -61,6 +72,7 @@ export class App implements vscode.Disposable {
       vscode.commands.registerCommand(Commands.contextMenuUnhighlight, this.contextMenuUnhighlightHandler, this)
     );
 
+    this.restoreHighlightsFromState();
     this.log('Initialized line highlighter.');
   }
 
@@ -91,7 +103,9 @@ export class App implements vscode.Disposable {
     },
   };
 
-  public async dispose() {}
+  public dispose(): void {
+    this.flushPersist();
+  }
 
   private onDidChangeTextDocumentHandler(event: vscode.TextDocumentChangeEvent): void {
     if (event.document.languageId === 'Log') {
@@ -117,6 +131,12 @@ export class App implements vscode.Disposable {
     this.highlightDecorationType = this.createTextEditorDecorationType();
     this.refresh();
     this._fileDecorationEmitter.fire(undefined); // refresh file decorations when settings change
+
+    if (!this.persistEnabled) {
+      this.clearPersistedState();
+    } else {
+      this.schedulePersist();
+    }
   }
 
   private onDidChangeVisibleTextEditorsHandler(editors: readonly vscode.TextEditor[]): any {
@@ -181,6 +201,56 @@ export class App implements vscode.Disposable {
   private onHighlightChangedHandler(): void {
     this.refresh();
     this._fileDecorationEmitter.fire(undefined);
+    this.schedulePersist();
+  }
+
+  private get persistEnabled(): boolean {
+    return (this.config?.get<boolean>(Settings.persistHighlights) ?? true) === true;
+  }
+
+  private restoreHighlightsFromState(): void {
+    if (!this.context || !this.persistEnabled) {
+      return;
+    }
+
+    const stored = this.context.workspaceState.get<PersistedHighlightCollection[]>(App.PERSIST_KEY);
+    if (stored && Array.isArray(stored) && stored.length > 0) {
+      this._highlightManager.Load(stored);
+      this.refresh();
+      this._fileDecorationEmitter.fire(undefined);
+    }
+  }
+
+  private clearPersistedState(): void {
+    if (this.persistTimer) {
+      clearTimeout(this.persistTimer);
+      this.persistTimer = undefined;
+    }
+    if (this.context) {
+      void this.context.workspaceState.update(App.PERSIST_KEY, []);
+    }
+  }
+
+  private schedulePersist(): void {
+    if (!this.context || !this.persistEnabled) {
+      return;
+    }
+    if (this.persistTimer) {
+      clearTimeout(this.persistTimer);
+    }
+    this.persistTimer = setTimeout(() => this.flushPersist(), 400);
+  }
+
+  private flushPersist(): void {
+    if (!this.context || !this.persistEnabled) {
+      return;
+    }
+    if (this.persistTimer) {
+      clearTimeout(this.persistTimer);
+      this.persistTimer = undefined;
+    }
+    const payload = this._highlightManager.Serialize();
+    void this.context.workspaceState.update(App.PERSIST_KEY, payload);
   }
 
   private get isActiveTextEditor(): boolean {
