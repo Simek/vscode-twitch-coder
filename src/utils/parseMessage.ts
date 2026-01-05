@@ -41,10 +41,10 @@ export function parseMessage(message: string): ParseMessageResult | undefined {
   }
 
   const highlight = cmdopts[2] === undefined;
-  const fileName = cmdopts[1] || cmdopts[5];
+  const fileName = cmdopts[1];
   const startLine = +cmdopts[3];
   const endLine = cmdopts[4] ? +cmdopts[4] : +cmdopts[3];
-  const comments = cmdopts[6];
+  const comments = cmdopts[5];
 
   const vStartLine = endLine < startLine ? endLine : startLine;
   const vEndLine = endLine < startLine ? startLine : endLine;
