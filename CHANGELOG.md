@@ -4,12 +4,14 @@ All notable changes to this project will be documented in this file.
 
 ## 🚧 Unreleased
 
+## Released
+
+### 0.5.0 - 2026.01.06
+
 - Add ability to persist highlight between VS Code restarts and an option to control the bechaviour.
 - Add ability to set the custom badge for file with highlight or remove it entirely.
 - Use the correctly cased Twitch username in tooltips and debug logs.
 - Fix highlight of not-active tabs for files with multiple dots in the name.
-
-## Released
 
 ### 0.4.1 - 2025.12.16
 
