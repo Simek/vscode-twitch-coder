@@ -62,11 +62,18 @@ suite('Utils Tests', function () {
         comment: 'comment',
       },
       {
-        message: '!line 5-15 settings.js comment',
+        message: '!line 5-15 settings.tsx comment',
         startLine: 5,
         endLine: 15,
-        fileName: 'settings.js',
+        fileName: 'settings.tsx',
         comment: 'comment',
+      },
+      {
+        message: '!line build.config.ts 4 comment is long',
+        startLine: 4,
+        endLine: 4,
+        fileName: 'build.config.ts',
+        comment: 'comment is long',
       },
     ];
 

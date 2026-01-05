@@ -205,7 +205,7 @@ export class App implements vscode.Disposable {
   }
 
   private get persistEnabled(): boolean {
-    return (this.config?.get<boolean>(Settings.persistHighlights) ?? true) === true;
+    return this.config?.get<boolean>(Settings.persistHighlights) ?? true;
   }
 
   private restoreHighlightsFromState(): void {

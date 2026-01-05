@@ -67,10 +67,7 @@ export class HighlightManager {
         const fileName = hc.fileName;
         const highlights = hc.highlights
           .filter(
-            (h) =>
-              typeof h?.userName === 'string' &&
-              Number.isFinite(h?.startLine) &&
-              Number.isFinite(h?.endLine)
+            (h) => typeof h?.userName === 'string' && Number.isFinite(h?.startLine) && Number.isFinite(h?.endLine)
           )
           .map((h) => {
             const startLine = Math.max(1, Math.trunc(h.startLine));
