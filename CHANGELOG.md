@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 ## Released
 
+### 0.5.1 - 2026.01.06
+
+- Add a UI Mode setting to control how the Highlights panel is displayed.
+
 ### 0.5.0 - 2026.01.06
 
 - Add ability to persist highlight between VS Code restarts and an option to control the bechaviour.

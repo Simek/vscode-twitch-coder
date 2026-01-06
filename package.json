@@ -2,7 +2,7 @@
   "name": "vscode-twitch-coder",
   "displayName": "Twitch Coder",
   "description": "A VS Code extension that lets your Twitch viewers help spot bugs, typos, and more by sending chat commands that highlight lines of code.",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "preview": false,
   "publisher": "simek",
   "engines": {
@@ -197,8 +197,9 @@
       "activitybar": [
         {
           "id": "twitchCoder-explorer",
-          "icon": "resources/highlighterIcon.svg",
-          "title": "Twitch Coder"
+          "icon": "resources/twitch-coder-icon-mono.svg",
+          "title": "Twitch Coder",
+          "when": "config.twitchCoder.UIMode === 'activitybar'"
         }
       ]
     },
@@ -206,7 +207,8 @@
       "explorer": [
         {
           "id": "twitchCoderTreeView-explorer",
-          "name": "Highlights"
+          "name": "Highlights",
+          "when": "config.twitchCoder.UIMode === 'panel'"
         }
       ],
       "debug": [
@@ -218,7 +220,8 @@
       "twitchCoder-explorer": [
         {
           "id": "twitchCoderTreeView",
-          "name": "Highlights"
+          "name": "Highlights",
+          "when": "config.twitchCoder.UIMode === 'activitybar'"
         }
       ]
     },
@@ -306,6 +309,17 @@
           "type": "string",
           "default": "💬",
           "description": "The badge character to display on files with highlights in the tab and File Explorer."
+        },
+        "twitchCoder.UIMode": {
+          "type": "string",
+          "enum": ["panel", "activitybar"],
+          "markdownEnumDescriptions": [
+            "Displays the highlights in panel inside File Explorer.",
+            "Displays the highlights as a separate tab in the Activity Bar."
+          ],
+          "enumItemLabels": ["Panel", "Activity Bar"],
+          "default": "panel",
+          "description": "Example setting with an enum"
         }
       }
     }
