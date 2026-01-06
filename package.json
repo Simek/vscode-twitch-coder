@@ -2,7 +2,7 @@
   "name": "vscode-twitch-coder",
   "displayName": "Twitch Coder",
   "description": "A VS Code extension that lets your Twitch viewers help spot bugs, typos, and more by sending chat commands that highlight lines of code.",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "preview": false,
   "publisher": "simek",
   "engines": {
@@ -232,7 +232,7 @@
         "twitchCoder.channels": {
           "type": "string",
           "default": "",
-          "description": "A comma separated list of channel name(s) to connect to on Twitch. Example: `simek` or for multiple channels: `simek, dev_spajus`."
+          "markdownDescription": "A comma-separated list of channel name(s) to connect to on Twitch. Example: `simek` or for multiple channels: `simek, dev_spajus`."
         },
         "twitchCoder.highlightColor": {
           "type": "string",
@@ -242,22 +242,22 @@
         "twitchCoder.highlightFontColor": {
           "type": "string",
           "default": "#fff",
-          "markdownDescription": "Font color of the decoration. Use `rgba()` and define transparent background colors to play well with other decorations. Example: `white`."
+          "markdownDescription": "Font color of the decoration. Use `rgba()` and define transparent background colors to play well with other decorations. Example: `#fff`."
         },
         "twitchCoder.highlightBorder": {
           "type": "string",
           "default": "1px solid #d7bdff",
-          "description": "CSS border styling property that will be applied to text enclosed by a decoration. Example: `1px solid #d7bdff`."
+          "markdownDescription": "CSS border styling property that will be applied to text enclosed by a decoration. Example: `1px solid #d7bdff`."
         },
         "twitchCoder.nickname": {
           "type": "string",
           "default": "",
-          "description": "The username the chat bot should use when joining a Twitch channel. If empty, your Twitch user will be used."
+          "description": "The username the chat bot should use when joining a Twitch channel. If empty, your Twitch username will be used."
         },
         "twitchCoder.switchActiveTab": {
           "type": "boolean",
           "default": false,
-          "description": "Whether or not allow the incoming highlight to switch the currently active editor tab."
+          "description": "Whether to allow incoming highlights to switch the currently active editor tab."
         },
         "twitchCoder.persistHighlights": {
           "type": "boolean",
@@ -267,13 +267,13 @@
         "twitchCoder.autoConnect": {
           "type": "boolean",
           "default": false,
-          "description": "Whether or not the chat bot should try connecting automatically when VS Code starts."
+          "description": "Whether the chat bot should try connecting automatically when VS Code starts."
         },
         "twitchCoder.announceBot": {
           "title": "Twitch Coder",
           "type": "boolean",
           "default": true,
-          "description": "Whether or not the chat bot should announce its joining or leaving the chat room."
+          "description": "Whether the chat bot should announce that it joined or left the chat room."
         },
         "twitchCoder.joinMessage": {
           "type": "string",
@@ -288,22 +288,22 @@
         "twitchCoder.requiredBadges": {
           "type": "array",
           "default": [],
-          "markdownDescription": "A list of badges required to use the highlighter command. The use must have at least one of these badges to use the command. Leave blank for no requirement. Example: `moderator, subscriber, vip`.",
+          "markdownDescription": "A list of badges required to use the highlighter command. The user must have at least one of these badges to use the command. Leave empty for no requirement. Example: `moderator, subscriber, vip`.",
           "items": {
             "type": "string",
             "pattern": "(admin|bits|broadcaster|global_mod|moderator|subscriber|staff|turbo|premium|follower)*",
-            "errorMessage": "Expected one of the following: `admin`, `bits`, `broadcaster`, `global_admin`, `moderator`, `subscriber`, `staff`, `turbo`, `premium` or `follower`."
+            "errorMessage": "Expected one of the following: `admin`, `bits`, `broadcaster`, `global_mod`, `moderator`, `subscriber`, `staff`, `turbo`, `premium` or `follower`."
           }
         },
         "twitchCoder.unhighlightOnDisconnect": {
           "type": "boolean",
           "default": false,
-          "description": "Whether or not unhighlight all lines when disconnected from the chat service."
+          "description": "Whether to remove all highlights when disconnected from the chat service."
         },
         "twitchCoder.usageTip": {
           "type": "string",
           "default": "💡 To use the line highlight command, type in the following format: `!line <number>` 🟣 for multiple lines: `!line <start>-<end>` 🟣 with a comment: `!line <number> <comment>` 🟣 for inactive, but open file: `!line <fileName> <number> <comment>`",
-          "description": "A tip shared by the bot when a user chats: `!line` or `!highlight`."
+          "markdownDescription": "A tip shared by the bot when a user chats: `!line` or `!highlight`."
         },
         "twitchCoder.fileDecorationBadge": {
           "type": "string",
@@ -319,7 +319,7 @@
           ],
           "enumItemLabels": ["Panel", "Activity Bar"],
           "default": "panel",
-          "description": "Example setting with an enum"
+          "description": "Control where the Highlights tree view is shown in the VS Code UI."
         }
       }
     }

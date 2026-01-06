@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file.
 
 ## Released
 
+### 0.5.2 - 2026.01.06
+
+- Fix description content and formating for multiple setting entries.
+
 ### 0.5.1 - 2026.01.06
 
 - Add a UI Mode setting to control how the Highlights panel is displayed.

@@ -37,7 +37,7 @@ To use this extension, you will need:
 1. Install the extension from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=Simek.vscode-twitch-coder) or [Open VSX](https://open-vsx.org/extension/simek/vscode-twitch-coder).
 2. Open your VS Code Settings and type in "twitch" into the search bar.
 
-   > You can press <kbd>CTRL/CMD</kbd> + <kbd>,</kbd>, or navigate via menus **File -> Perferences -> Settings**.
+   > You can press <kbd>CTRL/CMD</kbd> + <kbd>,</kbd>, or navigate via menus **File -> Preferences -> Settings**.
 
 3. Find the `Twitch Coder: Channels` setting and enter the name of the channel(s) to which you'd like the extension to connect.
 
@@ -78,10 +78,12 @@ Additionally, you can also include comments:
 !line <LineNumber> This is an example comment
 ```
 
-Or highlight the line in one of opened tabs, which is not in active (it also works with comment and line ranges):
+Or highlight the line in one of the open tabs that isn't active (this also works with comments and line ranges):
 
 ```sh
-!line <LineNumber> <FileName> This is an example comment
+!line <LineNumber/Range> <FileName> This is an example comment
+# OR
+!line <FileName> <LineNumber/Range> This is an example comment
 ```
 
 ## ⚙️ Extension Settings
@@ -99,10 +101,12 @@ Or highlight the line in one of opened tabs, which is not in active (it also wor
 - `twitchCoder.joinMessage`: The message the chat bot will say when joining a chat room.
 - `twitchCoder.leaveMessage`: The message the chat bot will say when leaving a chat room.
 - `twitchCoder.usageTip`: A tip shared by the bot when a user chats: `!highlight` or `!line`.
-- `twitchCoder.requiredBadges`: A list of badges required to use the highlighter command. The use must have at least one of these badges to use the command. Leave blank for no requirement. Example: `moderator, subscriber, vip`.
+- `twitchCoder.requiredBadges`: A list of badges required to use the highlighter command. The user must have at least one of these badges to use the command. Leave blank for no requirement. Example: `moderator, subscriber, vip`.
 - `twitchCoder.switchActiveTab`: Whether or not allow the incoming highlight to switch the currently active editor tab.
 - `twitchCoder.unhighlightOnDisconnect`: Whether or not unhighlight all lines when disconnected from the chat service.
 - `twitchCoder.persistHighlights`: Persist highlights in the current workspace across VS Code reloads.
+- `twitchCoder.fileDecorationBadge`: The badge character to display on files with highlights in the tab and File Explorer.
+- `twitchCoder.UIMode`: Control where the Highlights tree view is shown in the VS Code UI.
 
 ## 👥 Attribution
 
