@@ -25,6 +25,9 @@ export class App implements vscode.Disposable {
   private context?: vscode.ExtensionContext;
   private persistTimer?: NodeJS.Timeout;
 
+  private treeViewExplorer?: vscode.TreeView<HighlightTreeItem>;
+  private treeViewActivityBar?: vscode.TreeView<HighlightTreeItem>;
+
   constructor(outputChannel?: vscode.OutputChannel) {
     this.log = new Logger(outputChannel).log;
     this.config = vscode.workspace.getConfiguration(Configuration.sectionIdentifier);
@@ -40,8 +43,19 @@ export class App implements vscode.Disposable {
     this.log('Initializing line highlighter...');
     this.context = context;
 
+    this.treeViewExplorer = vscode.window.createTreeView('twitchCoderTreeView-explorer', {
+      treeDataProvider: this._highlightTreeDataProvider,
+    });
+    this.treeViewActivityBar = vscode.window.createTreeView('twitchCoderTreeView', {
+      treeDataProvider: this._highlightTreeDataProvider,
+    });
+
     context.subscriptions.push(
       this,
+
+      this.treeViewExplorer,
+      this.treeViewActivityBar,
+
       this._highlightManager.onHighlightChanged(this.onHighlightChangedHandler, this),
 
       vscode.window.onDidChangeVisibleTextEditors(this.onDidChangeVisibleTextEditorsHandler, this),
@@ -51,10 +65,7 @@ export class App implements vscode.Disposable {
       vscode.workspace.onDidChangeConfiguration(this.onDidChangeConfigurationHandler, this),
 
       vscode.window.registerFileDecorationProvider(this.fileDecorationProvider),
-
-      vscode.window.registerTreeDataProvider('twitchCoderTreeView-explorer', this._highlightTreeDataProvider),
       vscode.window.registerTreeDataProvider('twitchCoderTreeView-debug', this._highlightTreeDataProvider),
-      vscode.window.registerTreeDataProvider('twitchCoderTreeView', this._highlightTreeDataProvider),
 
       vscode.commands.registerCommand(Commands.refreshTreeView, this.refreshTreeviewHandler, this),
       vscode.commands.registerCommand(Commands.unhighlightAllTreeView, this.unhighlightAllHandler, this),
@@ -73,7 +84,33 @@ export class App implements vscode.Disposable {
     );
 
     this.restoreHighlightsFromState();
+    this.updateHighlightsBadge();
     this.log('Initialized line highlighter.');
+  }
+
+  private updateHighlightsBadge(): void {
+    const uiMode = this.config?.get<'panel' | 'activitybar'>(Settings.UIMode) ?? 'panel';
+    const count = this._highlightManager.GetTotalHighlightsCount();
+    const badge = count > 0 ? { value: count, tooltip: `${count} highlight${count === 1 ? '' : 's'}` } : undefined;
+
+    switch (uiMode) {
+      case 'panel':
+        if (this.treeViewExplorer) {
+          this.treeViewExplorer.badge = badge;
+        }
+        if (this.treeViewActivityBar) {
+          this.treeViewActivityBar.badge = undefined;
+        }
+        break;
+      case 'activitybar':
+        if (this.treeViewExplorer) {
+          this.treeViewExplorer.badge = undefined;
+        }
+        if (this.treeViewActivityBar) {
+          this.treeViewActivityBar.badge = badge;
+        }
+        break;
+    }
   }
 
   public API: HighlighterAPI = {
@@ -196,6 +233,7 @@ export class App implements vscode.Disposable {
       te.setDecorations(this.highlightDecorationType, this._highlightManager.GetDecorations(te.document.fileName));
     });
     this._highlightTreeDataProvider.refresh();
+    this.updateHighlightsBadge();
   }
 
   private onHighlightChangedHandler(): void {

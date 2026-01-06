@@ -7,6 +7,7 @@ out/test/**
 patches/**
 resources/**
 !resources/twitch-coder-icon.png
+!resources/twitch-coder-icon-mono.svg
 src/**
 tests/**
 tests-out/**

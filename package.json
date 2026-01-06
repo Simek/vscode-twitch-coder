@@ -2,7 +2,7 @@
   "name": "vscode-twitch-coder",
   "displayName": "Twitch Coder",
   "description": "A VS Code extension that lets your Twitch viewers help spot bugs, typos, and more by sending chat commands that highlight lines of code.",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "preview": false,
   "publisher": "simek",
   "engines": {

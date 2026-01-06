@@ -14,4 +14,5 @@ export enum Settings {
   'switchActiveTab' = 'switchActiveTab',
   'fileDecorationBadge' = 'fileDecorationBadge',
   'persistHighlights' = 'persistHighlights',
+  'UIMode' = 'UIMode',
 }

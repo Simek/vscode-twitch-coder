@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 
 ## Released
 
+### 0.5.3 - 2026.01.06
+
+- Show the count badge on dedicated Activity Bar tab, or File Explorer tab based on the UI mode selected.
+- Fix missing Activity Bar tab icon file in the bundle.
+
 ### 0.5.2 - 2026.01.06
 
 - Fix description content and formating for multiple setting entries.

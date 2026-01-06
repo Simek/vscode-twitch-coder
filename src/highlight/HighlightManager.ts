@@ -296,6 +296,10 @@ export class HighlightManager {
     }
   }
 
+  public GetTotalHighlightsCount(): number {
+    return this.highlightCollection.reduce((sum, hc) => sum + hc.highlights.length, 0);
+  }
+
   private HighlightExists(idx: number, userName: string, startLine: number, endLine?: number): boolean {
     return this.highlightCollection[idx].highlights.some(
       (h) => (h.userName === userName || userName === 'self') && h.startLine <= startLine && h.endLine >= endLine!
