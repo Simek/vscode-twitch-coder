@@ -4,7 +4,7 @@ import { AuthenticationService } from './AuthenticationService';
 import { ChatClient, type ChatClientMessageReceivedEvent } from './ChatClient';
 import { Commands, Configuration, Settings } from '../enums';
 import { type HighlighterAPI } from '../api';
-import { Logger, type log } from '../logger';
+import { type log, Logger } from '../logger';
 import { parseMessage } from '../utils';
 
 export class TwitchChatService implements vscode.Disposable {
@@ -120,7 +120,7 @@ export class TwitchChatService implements vscode.Disposable {
       this.chatClientStatusBarItem.command = Commands.connect;
       this.updateChatButtonState();
 
-      const unhighlightOnDisconnect = this.config!.get<boolean>(Settings.unhighlightOnDisconnect) || false;
+      const unhighlightOnDisconnect = this.config!.get<boolean>(Settings.unhighlightOnDisconnect) ?? false;
       if (unhighlightOnDisconnect) {
         this._api.requestUnhighlightAll('twitch');
       }

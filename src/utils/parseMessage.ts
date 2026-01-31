@@ -33,7 +33,7 @@ export function parseMessage(message: string): ParseMessageResult | undefined {
    *
    */
   const commandPattern =
-    /\!(?:line|highlight) (?:([\w.]+) )?(\!)?(-?\d+)(?:(?:-{1}|\.{2})(-?\d+))?(?: ([\w.]+\.[\w]+))?(?: (.+))?/i;
+    /!(?:line|highlight) (?:([\w.]+) )?(!)?(-?\d+)(?:(?:-{1}|\.{2})(-?\d+))?(?: ([\w.]+\.[\w]+))?(?: (.+))?/i;
   const cmdopts = commandPattern.exec(message);
 
   if (!cmdopts) {

@@ -1,14 +1,14 @@
 import { type Badges, type ChatUserstate, Client, type Options } from 'tmi.js';
 import {
+  commands,
   type ConfigurationChangeEvent,
   type Disposable,
   type Event,
   EventEmitter,
   type ExtensionContext,
-  type WorkspaceConfiguration,
-  commands,
   window,
   workspace,
+  type WorkspaceConfiguration,
 } from 'vscode';
 
 import { API } from './api/API';
@@ -57,12 +57,12 @@ export class ChatClient implements Disposable {
 
   public updateConfig() {
     this.config = workspace.getConfiguration(Configuration.sectionIdentifier);
-    this.autoConnect = this.config.get<boolean>(Settings.autoConnect) || false;
-    this.announceBot = this.config.get<boolean>(Settings.announceBot) || true;
-    this.joinMessage = this.config.get<string>(Settings.joinMessage) || '';
-    this.leaveMessage = this.config.get<string>(Settings.leaveMessage) || '';
-    this.usageTip = this.config.get<string>(Settings.usageTip) || '';
-    this.requiredBadges = this.config.get<string[]>(Settings.requiredBadges) || [];
+    this.autoConnect = this.config.get<boolean>(Settings.autoConnect) ?? false;
+    this.announceBot = this.config.get<boolean>(Settings.announceBot) ?? true;
+    this.joinMessage = this.config.get<string>(Settings.joinMessage) ?? '';
+    this.leaveMessage = this.config.get<string>(Settings.leaveMessage) ?? '';
+    this.usageTip = this.config.get<string>(Settings.usageTip) ?? '';
+    this.requiredBadges = this.config.get<string[]>(Settings.requiredBadges) ?? [];
   }
 
   public async connect(silent: boolean = false) {

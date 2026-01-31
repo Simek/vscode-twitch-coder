@@ -97,7 +97,7 @@ export class HighlightManager {
     const idx = this.highlightCollection.findIndex(
       (hc) => hc.fileName === fileName || fileName.toLowerCase().endsWith(hc.fileName.toLowerCase())
     );
-    if (idx > -1) {
+    if (idx !== -1) {
       return this.highlightCollection[idx].highlights.map<DecorationOptions>((h) => {
         return {
           hoverMessage: `From ${h.userName.startsWith('self:') ? 'me' : (h.userName.split(':').at(-1) ?? 'Twitch user')}${h.comments ? `: ${h.comments}` : ''}`,
@@ -109,9 +109,7 @@ export class HighlightManager {
   }
 
   public Add(document: TextDocument, userName: string, startLine: number, endLine?: number, comments?: string): void {
-    if (!endLine) {
-      endLine = startLine;
-    }
+    endLine ??= startLine;
 
     const range = new Range(
       new Position(--startLine, 0),
@@ -123,7 +121,7 @@ export class HighlightManager {
     const idx = this.highlightCollection.findIndex((h) =>
       document.fileName.toLowerCase().endsWith(h.fileName.toLowerCase())
     );
-    if (idx > -1) {
+    if (idx !== -1) {
       if (!this.HighlightExists(idx, userName, startLine, endLine)) {
         this.highlightCollection[idx].highlights.push(highlight);
       }
@@ -138,16 +136,14 @@ export class HighlightManager {
   }
 
   public AddQueued(fileName: string, userName: string, startLine: number, endLine?: number, comments?: string): void {
-    if (!endLine) {
-      endLine = startLine;
-    }
+    endLine ??= startLine;
 
     const range = new Range(new Position(--startLine, 0), new Position(--endLine, 9999));
 
     const highlight = new Highlight(userName, range, comments);
 
     const idx = this.highlightCollection.findIndex((h) => h.fileName.toLowerCase().endsWith(fileName.toLowerCase()));
-    if (idx > -1) {
+    if (idx !== -1) {
       if (!this.HighlightExists(idx, userName, startLine, endLine)) {
         this.highlightCollection[idx].highlights.push(highlight);
       }
@@ -174,11 +170,11 @@ export class HighlightManager {
     }
 
     const idx = this.highlightCollection.findIndex((h) => h.fileName === documentOrFileName);
-    if (idx > -1) {
+    if (idx !== -1) {
       const hidx = this.highlightCollection[idx].highlights.findIndex(
         (h) => (h.userName === userName || userName === 'self') && h.startLine <= lineNumber && h.endLine >= lineNumber
       );
-      if (hidx > -1) {
+      if (hidx !== -1) {
         this.highlightCollection[idx].highlights.splice(hidx, 1);
       }
       if (!deferRefresh) {
@@ -194,7 +190,7 @@ export class HighlightManager {
   public Clear(service?: string): void {
     if (service) {
       this.highlightCollection.forEach((hc) => {
-        const highlightsToRemove = hc.highlights.filter((h) => h.userName.indexOf(`${service}:`) > -1);
+        const highlightsToRemove = hc.highlights.filter((h) => h.userName.includes(`${service}:`));
         highlightsToRemove.forEach((h) => {
           this.Remove(hc.fileName, h.userName, h.startLine, true);
         });
@@ -207,7 +203,7 @@ export class HighlightManager {
 
   public Rename(oldName: string, newName: string) {
     const idx = this.highlightCollection.findIndex((hc) => hc.fileName === oldName);
-    if (idx > -1) {
+    if (idx !== -1) {
       this.highlightCollection[idx].fileName = newName;
     }
   }
@@ -215,7 +211,7 @@ export class HighlightManager {
   public UpdateHighlight(document: TextDocument, valueChanged: TextDocumentContentChangeEvent) {
     const idx = this.highlightCollection.findIndex((hc) => hc.fileName === document.fileName);
     let updated = false;
-    if (idx > -1) {
+    if (idx !== -1) {
       // A carriage return was removed.
       if (valueChanged.text.length === 0 && valueChanged.range.end.line === valueChanged.range.start.line + 1) {
         let highlights = this.highlightCollection[idx].highlights.filter(

@@ -221,9 +221,9 @@ export class App implements vscode.Disposable {
     }
 
     return vscode.window.createTextEditorDecorationType({
-      backgroundColor: configuration.get<string>(Settings.highlightColor) || 'rgba(169,112,255,0.8)',
-      border: configuration.get<string>(Settings.highlightBorder) || '1px solid #d7bdff',
-      color: configuration.get<string>(Settings.highlightFontColor) || '#fff',
+      backgroundColor: configuration.get<string>(Settings.highlightColor) ?? 'rgba(169,112,255,0.8)',
+      border: configuration.get<string>(Settings.highlightBorder) ?? '1px solid #d7bdff',
+      color: configuration.get<string>(Settings.highlightFontColor) ?? '#fff',
     });
   }
 
@@ -372,10 +372,9 @@ export class App implements vscode.Disposable {
   private async gotoHighlightHandler(lineNumber: number, fileName: string): Promise<void> {
     const document = await vscode.workspace.openTextDocument(fileName);
     if (document) {
-      vscode.window.showTextDocument(document).then((editor) => {
-        lineNumber = lineNumber < 3 ? 2 : lineNumber;
-        editor.revealRange(document.lineAt(lineNumber - 2).range);
-      });
+      const editor = await vscode.window.showTextDocument(document);
+      lineNumber = lineNumber < 3 ? 2 : lineNumber;
+      editor.revealRange(document.lineAt(lineNumber - 2).range);
     }
   }
 
@@ -430,7 +429,7 @@ export class App implements vscode.Disposable {
             tabInput.uri.fsPath,
             `${service}:${userName}`,
             startLine,
-            endLine || startLine,
+            endLine ?? startLine,
             comments
           );
         }
@@ -449,7 +448,7 @@ export class App implements vscode.Disposable {
       return;
     }
 
-    this._highlightManager.Add(editor.document, `${service}:${userName}`, startLine, endLine || startLine, comments);
+    this._highlightManager.Add(editor.document, `${service}:${userName}`, startLine, endLine ?? startLine, comments);
   }
 
   private requestUnhighlightHandler(service: string, userName: string, lineNumber: number): void {

@@ -3,11 +3,11 @@ export function naturalCompare(a: any, b: any) {
   let bx: any[] = [];
 
   a.replace(/(\d+)|(\D+)/g, function (_: any, $1: any, $2: any) {
-    ax.push([$1 || Infinity, $2 || '']);
+    ax.push([$1 ?? Infinity, $2 ?? '']);
   });
 
   b.replace(/(\d+)|(\D+)/g, function (_: any, $1: any, $2: any) {
-    bx.push([$1 || Infinity, $2 || '']);
+    bx.push([$1 ?? Infinity, $2 ?? '']);
   });
 
   while (ax.length && bx.length) {

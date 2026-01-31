@@ -1,7 +1,6 @@
 import { type OutputChannel } from 'vscode';
 
 import { LogLevel } from './enums';
-import { isEnum } from './utils';
 
 export type log = {
   (message: string, ...optionalParams: any[]): void;
@@ -13,7 +12,7 @@ export class Logger {
 
   constructor(outputChannel?: OutputChannel, thisArgs?: any) {
     this._channel = outputChannel;
-    this.log = this.log.bind(thisArgs || this);
+    this.log = this.log.bind(thisArgs ?? this);
   }
 
   private appendPrefix(value: number): string {
@@ -24,12 +23,15 @@ export class Logger {
   public log(levelOrMessage: LogLevel | string, message?: string, ...optionalParams: any[]): void {
     const captains: any = console;
 
-    let level;
-    if (isEnum(levelOrMessage, LogLevel)) {
-      level = levelOrMessage;
+    let resolvedLevel: LogLevel;
+    let resolvedMessage: string | undefined;
+
+    if (typeof levelOrMessage === 'string') {
+      resolvedLevel = LogLevel.Information;
+      resolvedMessage = levelOrMessage;
     } else {
-      level = LogLevel.Information;
-      message = levelOrMessage;
+      resolvedLevel = levelOrMessage;
+      resolvedMessage = message;
     }
 
     const getTime = (): {
@@ -49,11 +51,11 @@ export class Logger {
     };
 
     const { hours, minutes, seconds } = getTime();
-    const log = `[${hours}:${minutes}:${seconds}] ${message}`;
+    const log = `[${hours}:${minutes}:${seconds}] ${resolvedMessage}`;
 
-    captains[level](log, ...optionalParams);
+    captains[resolvedLevel](log, ...optionalParams);
 
-    if (this._channel && level !== LogLevel.Debug) {
+    if (this._channel && resolvedLevel !== (LogLevel.Debug as LogLevel)) {
       this._channel.appendLine(log);
     }
   }

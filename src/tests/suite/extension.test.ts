@@ -2,7 +2,7 @@ import * as assert from 'node:assert';
 import { setup, suite, test } from 'mocha';
 import * as vscode from 'vscode';
 
-import { extSuffix, extensionId } from '../../constants';
+import { extensionId, extSuffix } from '../../constants';
 import { Commands, Settings } from '../../enums';
 
 type Command = {
@@ -71,16 +71,14 @@ suite('Extension Tests', function () {
     }
   });
 
-  test('package.json commands registered in extension', function (done) {
+  test('package.json commands registered in extension', async function () {
     const commandStrings: string[] = extension.packageJSON.contributes.commands.map((c: Command) => c.command);
 
-    vscode.commands.getCommands(true).then((allCommands: string[]) => {
-      const commands: string[] = allCommands.filter((c) => c.startsWith(`${extSuffix}.`));
-      commands.forEach((command) => {
-        const result = commandStrings.some((c) => c === command);
-        assert.ok(result);
-      });
-      done();
+    const allCommands = await vscode.commands.getCommands(true);
+    const commands: string[] = allCommands.filter((c) => c.startsWith(`${extSuffix}.`));
+    commands.forEach((command) => {
+      const result = commandStrings.some((c) => c === command);
+      assert.ok(result);
     });
   });
 });

@@ -2,7 +2,7 @@ import { readFile, readFileSync } from 'node:fs';
 import * as http from 'node:http';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { type Event, EventEmitter, Uri, env, extensions, window } from 'vscode';
+import { env, type Event, EventEmitter, extensions, Uri, window } from 'vscode';
 
 import { API } from './api/API';
 import CredentialManager from '../credentialManager';
@@ -95,7 +95,6 @@ export class AuthenticationService {
         if (req.url === '/') {
           res.writeHead(200, { 'Content-Type': 'text/html', 'Cache-Control': 'no-cache' });
           res.end(file);
-          return;
         } else if (path === '/oauth') {
           const accessToken = queryParams.get('access_token');
 
