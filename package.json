@@ -24,7 +24,7 @@
     "vscode:test": "bun vscode:test-prepare && bun vscode-test",
     "vscode:test-prepare": "rimraf ./tests-out && tsc -p ./ --outDir ./tests-out",
     "package": "bun vsce package --allow-star-activation",
-    "lint": "bunx oxlint --type-aware && oxfmt -check",
+    "lint": "bunx oxlint --type-aware && oxfmt --check",
     "lint:fix": "bunx oxlint --type-aware --fix && oxfmt",
     "compile": "rimraf ./out && tsc -p ./ --noEmit && copyfiles -au 1 ./src/**/*.html out/ && bun bundle",
     "bundle": "esbuild src/extension.ts --outdir=out --format=cjs --platform=node --minify --external:vscode --bundle"
@@ -41,9 +41,9 @@
     "@vscode/vsce": "^3.7.1",
     "copyfiles": "^2.3.0",
     "esbuild": "^0.27.2",
-    "glob": "^13.0.0",
-    "oxfmt": "^0.27.0",
-    "oxlint": "^1.42.0",
+    "glob": "^13.0.1",
+    "oxfmt": "^0.28.0",
+    "oxlint": "^1.43.0",
     "oxlint-tsgolint": "^0.11.4",
     "rimraf": "^6.1.2",
     "typescript": "5.9.3"
