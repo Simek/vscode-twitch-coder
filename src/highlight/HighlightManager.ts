@@ -42,14 +42,14 @@ export class HighlightManager {
   }
 
   public Serialize(): PersistedHighlightCollection[] {
-    return this.highlightCollection.map((hc) => {
+    return this.highlightCollection.map(({ fileName, highlights }) => {
       return {
-        fileName: hc.fileName,
-        highlights: hc.highlights.map((h) => ({
-          userName: h.userName,
-          startLine: h.startLine,
-          endLine: h.endLine,
-          comments: h.comments,
+        fileName,
+        highlights: highlights.map(({ userName, startLine, endLine, comments }) => ({
+          userName,
+          startLine,
+          endLine,
+          comments,
         })),
       };
     });
@@ -86,7 +86,7 @@ export class HighlightManager {
   public GetHighlightDetails(): string[] {
     if (this.highlightCollection.length > 0) {
       return this.highlightCollection
-        .map((hc) => hc.highlights.map((h) => `${hc.fileName}: ${h.startLine}`))
+        .map(({ fileName, highlights }) => highlights.map(({ startLine }) => `${fileName}: ${startLine}`))
         .reduce((s) => s)
         .sort((hA, hB) => hB.localeCompare(hA));
     }
@@ -98,10 +98,10 @@ export class HighlightManager {
       (hc) => hc.fileName === fileName || fileName.toLowerCase().endsWith(hc.fileName.toLowerCase())
     );
     if (idx !== -1) {
-      return this.highlightCollection[idx].highlights.map<DecorationOptions>((h) => {
+      return this.highlightCollection[idx].highlights.map<DecorationOptions>(({ userName, range, comments }) => {
         return {
-          hoverMessage: `From ${h.userName.startsWith('self:') ? 'me' : (h.userName.split(':').at(-1) ?? 'Twitch user')}${h.comments ? `: ${h.comments}` : ''}`,
-          range: h.range,
+          hoverMessage: `From ${userName.startsWith('self:') ? 'me' : (userName.split(':').at(-1) ?? 'Twitch user')}${comments ? `: ${comments}` : ''}`,
+          range,
         };
       });
     }
@@ -169,7 +169,7 @@ export class HighlightManager {
       documentOrFileName = documentOrFileName.fileName;
     }
 
-    const idx = this.highlightCollection.findIndex((h) => h.fileName === documentOrFileName);
+    const idx = this.highlightCollection.findIndex(({ fileName }) => fileName === documentOrFileName);
     if (idx !== -1) {
       const hidx = this.highlightCollection[idx].highlights.findIndex(
         (h) => (h.userName === userName || userName === 'self') && h.startLine <= lineNumber && h.endLine >= lineNumber
@@ -189,10 +189,10 @@ export class HighlightManager {
 
   public Clear(service?: string): void {
     if (service) {
-      this.highlightCollection.forEach((hc) => {
-        const highlightsToRemove = hc.highlights.filter((h) => h.userName.includes(`${service}:`));
+      this.highlightCollection.forEach(({ highlights, fileName }) => {
+        const highlightsToRemove = highlights.filter(({ userName }) => userName.includes(`${service}:`));
         highlightsToRemove.forEach((h) => {
-          this.Remove(hc.fileName, h.userName, h.startLine, true);
+          this.Remove(fileName, h.userName, h.startLine, true);
         });
       });
     } else {
@@ -202,7 +202,7 @@ export class HighlightManager {
   }
 
   public Rename(oldName: string, newName: string) {
-    const idx = this.highlightCollection.findIndex((hc) => hc.fileName === oldName);
+    const idx = this.highlightCollection.findIndex(({ fileName }) => fileName === oldName);
     if (idx !== -1) {
       this.highlightCollection[idx].fileName = newName;
     }
@@ -217,11 +217,11 @@ export class HighlightManager {
         let highlights = this.highlightCollection[idx].highlights.filter(
           (h) => h.range.start.line > valueChanged.range.end.line
         );
-        highlights.forEach((highlight) => {
-          highlight.Update(
+        highlights.forEach(({ Update, range }) => {
+          Update(
             new Range(
-              new Position(highlight.range.start.line - 1, highlight.range.start.character),
-              new Position(highlight.range.end.line, highlight.range.end.character)
+              new Position(range.start.line - 1, range.start.character),
+              new Position(range.end.line, range.end.character)
             )
           );
           updated = true;
@@ -229,11 +229,11 @@ export class HighlightManager {
         highlights = this.highlightCollection[idx].highlights.filter(
           (h) => h.range.end.line >= valueChanged.range.end.line
         );
-        highlights.forEach((highlight) => {
-          highlight.Update(
+        highlights.forEach(({ Update, range }) => {
+          Update(
             new Range(
-              new Position(highlight.range.start.line, highlight.range.start.character),
-              new Position(highlight.range.end.line - 1, highlight.range.end.character)
+              new Position(range.start.line, range.start.character),
+              new Position(range.end.line - 1, range.end.character)
             )
           );
           updated = true;
@@ -242,11 +242,11 @@ export class HighlightManager {
         let highlights = this.highlightCollection[idx].highlights.filter(
           (h) => h.range.end.line >= valueChanged.range.start.line
         );
-        highlights.forEach((highlight) => {
-          highlight.Update(
+        highlights.forEach(({ Update, range }) => {
+          Update(
             new Range(
-              new Position(highlight.range.start.line, highlight.range.start.character),
-              new Position(highlight.range.end.line + 1, highlight.range.end.character)
+              new Position(range.start.line, range.start.character),
+              new Position(range.end.line + 1, range.end.character)
             )
           );
           updated = true;
@@ -254,32 +254,34 @@ export class HighlightManager {
         highlights = this.highlightCollection[idx].highlights.filter(
           (h) => h.range.start.line > valueChanged.range.start.line
         );
-        highlights.forEach((highlight) => {
-          highlight.Update(
+        highlights.forEach(({ Update, range }) => {
+          Update(
             new Range(
-              new Position(highlight.range.start.line + 1, highlight.range.start.character),
-              new Position(highlight.range.end.line, highlight.range.end.character)
+              new Position(range.start.line + 1, range.start.character),
+              new Position(range.end.line, range.end.character)
             )
           );
           updated = true;
         });
       } else {
-        const highlights = this.highlightCollection[idx].highlights.filter((h) => h.range.contains(valueChanged.range));
-        highlights.forEach((h) => {
+        const highlights = this.highlightCollection[idx].highlights.filter(({ range }) =>
+          range.contains(valueChanged.range)
+        );
+        highlights.forEach(({ Update, range }) => {
           if (valueChanged.text.length === 0) {
             // A character was deleted.
-            h.Update(
+            Update(
               new Range(
-                new Position(h.range.start.line, h.range.start.character),
-                new Position(h.range.end.line, h.range.end.character - 1)
+                new Position(range.start.line, range.start.character),
+                new Position(range.end.line, range.end.character - 1)
               )
             );
             updated = true;
           } else {
-            h.Update(
+            Update(
               new Range(
-                new Position(h.range.start.line, h.range.start.character),
-                new Position(h.range.end.line, h.range.end.character + valueChanged.text.length)
+                new Position(range.start.line, range.start.character),
+                new Position(range.end.line, range.end.character + valueChanged.text.length)
               )
             );
             updated = true;
@@ -293,7 +295,7 @@ export class HighlightManager {
   }
 
   public GetTotalHighlightsCount(): number {
-    return this.highlightCollection.reduce((sum, hc) => sum + hc.highlights.length, 0);
+    return this.highlightCollection.reduce((sum, { highlights }) => sum + highlights.length, 0);
   }
 
   private HighlightExists(idx: number, userName: string, startLine: number, endLine?: number): boolean {

@@ -32,10 +32,9 @@ export class HighlightTreeDataProvider implements TreeDataProvider<HighlightTree
     }
     let highlightTreeItems: HighlightTreeItem[] = [];
     const currentHighlightCollections = this.getHighlightCollections().filter((hc) => hc.highlights.length > 0);
-    currentHighlightCollections.forEach((hc) => {
-      const highlights = hc.highlights;
-      const label = basename(hc.fileName);
-      highlightTreeItems.push(new HighlightTreeItem(label, hc.fileName, highlights, TreeItemCollapsibleState.Expanded));
+    currentHighlightCollections.forEach(({ highlights, fileName }) => {
+      const label = basename(fileName);
+      highlightTreeItems.push(new HighlightTreeItem(label, fileName, highlights, TreeItemCollapsibleState.Expanded));
     });
     highlightTreeItems = highlightTreeItems.sort((highlightTreeItemA, highlightTreeItemB) =>
       highlightTreeItemB.label.localeCompare(highlightTreeItemA.label)
