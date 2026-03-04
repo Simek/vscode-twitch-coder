@@ -13,9 +13,9 @@ import { type log } from '../logger';
 export class AuthenticationService {
   private readonly _onAuthStatusChanged: EventEmitter<boolean> = new EventEmitter();
   public readonly onAuthStatusChanged: Event<boolean> = this._onAuthStatusChanged.event;
-  private port: number = 5001;
+  private readonly port: number = 5001;
 
-  constructor(private log: log) {}
+  constructor(private readonly log: log) {}
 
   public async initialize() {
     const accessToken = await CredentialManager.getSecret(SecretKeys.account);

@@ -8,7 +8,7 @@ import { naturalCompare } from '../../utils';
 export class HighlightTreeDataProvider implements TreeDataProvider<HighlightTreeItem> {
   private readonly _onDidChangeTreeData: EventEmitter<HighlightTreeItem | undefined>;
 
-  constructor(private getHighlightCollections = (): HighlightCollection[] => []) {
+  constructor(private readonly getHighlightCollections = (): HighlightCollection[] => []) {
     this._onDidChangeTreeData = new EventEmitter();
   }
 

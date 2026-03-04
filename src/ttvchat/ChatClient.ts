@@ -43,7 +43,7 @@ export class ChatClient implements Disposable {
   private usageTip: string = '';
   private requiredBadges: string[] = [];
 
-  constructor(private log: log) {}
+  constructor(private readonly log: log) {}
 
   public async initialize(context: ExtensionContext) {
     this.updateConfig();
