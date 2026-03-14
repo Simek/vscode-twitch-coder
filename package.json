@@ -20,12 +20,12 @@
   "main": "./out/extension.js",
   "scripts": {
     "vscode:prepublish": "bun compile",
-    "vscode:publish": "bun vsce publish --allow-star-activation",
+    "vscode:publish": "vsce publish --allow-star-activation",
     "vscode:test": "bun vscode:test-prepare && bun vscode-test",
     "vscode:test-prepare": "rimraf ./tests-out && tsc -p ./ --outDir ./tests-out",
-    "package": "bun vsce package --allow-star-activation",
-    "lint": "bunx oxlint --type-aware && oxfmt --check",
-    "lint:fix": "bunx oxlint --type-aware --fix && oxfmt",
+    "package": "vsce package --allow-star-activation",
+    "lint": "oxlint --type-aware && oxfmt --check",
+    "lint:fix": "oxlint --type-aware --fix && oxfmt",
     "compile": "rimraf ./out && tsc -p ./ --noEmit && copyfiles -au 1 ./src/**/*.html out/ && bun bundle",
     "bundle": "esbuild src/extension.ts --outdir=out --format=cjs --platform=node --minify --external:vscode --bundle"
   },
