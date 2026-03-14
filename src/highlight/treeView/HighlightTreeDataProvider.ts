@@ -1,9 +1,10 @@
 import { basename } from 'node:path';
 import { type Event, EventEmitter, type TreeDataProvider, type TreeItem, TreeItemCollapsibleState } from 'vscode';
 
-import { type HighlightCollection } from '../HighlightManager';
-import { HighlightTreeItem } from './HighlightTreeItem';
 import { naturalCompare } from '../../utils';
+import { type HighlightCollection } from '../HighlightManager';
+
+import { HighlightTreeItem } from './HighlightTreeItem';
 
 export class HighlightTreeDataProvider implements TreeDataProvider<HighlightTreeItem> {
   private readonly _onDidChangeTreeData: EventEmitter<HighlightTreeItem | undefined>;
@@ -31,7 +32,7 @@ export class HighlightTreeDataProvider implements TreeDataProvider<HighlightTree
       );
     }
     let highlightTreeItems: HighlightTreeItem[] = [];
-    const currentHighlightCollections = this.getHighlightCollections().filter((hc) => hc.highlights.length > 0);
+    const currentHighlightCollections = this.getHighlightCollections().filter(hc => hc.highlights.length > 0);
     currentHighlightCollections.forEach(({ highlights, fileName }) => {
       const label = basename(fileName);
       highlightTreeItems.push(new HighlightTreeItem(label, fileName, highlights, TreeItemCollapsibleState.Expanded));

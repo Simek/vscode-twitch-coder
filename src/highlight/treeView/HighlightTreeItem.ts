@@ -1,7 +1,7 @@
 import { type Command, TreeItem, TreeItemCollapsibleState } from 'vscode';
 
-import { type Highlight } from '../Highlight';
 import { Commands } from '../../enums';
+import { type Highlight } from '../Highlight';
 
 export class HighlightTreeItem extends TreeItem {
   constructor(
@@ -36,16 +36,16 @@ export class HighlightTreeItem extends TreeItem {
 
       return highlightAuthor;
     } else {
-      return this.highlights.map((highlight) => highlight.userName.split(':').at(1) ?? 'unknown').join(', ');
+      return this.highlights.map(highlight => highlight.userName.split(':').at(1) ?? 'unknown').join(', ');
     }
   }
 
   public get HighlightTreeItems(): HighlightTreeItem[] {
     const children: HighlightTreeItem[] = [];
 
-    this.highlights.forEach((highlight) => {
+    this.highlights.forEach(highlight => {
       const label = `Line: ${highlight.endLine > highlight.startLine ? `${highlight.startLine} - ${highlight.endLine}` : `${highlight.startLine}`}`;
-      const existingItem = children.find((item) => item.label === label);
+      const existingItem = children.find(item => item.label === label);
       if (existingItem) {
         existingItem.highlights.push(highlight);
       } else {

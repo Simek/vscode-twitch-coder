@@ -1,11 +1,12 @@
 import * as vscode from 'vscode';
 
-import { AuthenticationService } from './AuthenticationService';
-import { ChatClient, type ChatClientMessageReceivedEvent } from './ChatClient';
-import { Commands, Configuration, Settings } from '../enums';
 import { type HighlighterAPI } from '../api';
+import { Commands, Configuration, Settings } from '../enums';
 import { type log, Logger } from '../logger';
 import { parseMessage } from '../utils';
+
+import { AuthenticationService } from './AuthenticationService';
+import { ChatClient, type ChatClientMessageReceivedEvent } from './ChatClient';
 
 export class TwitchChatService implements vscode.Disposable {
   private readonly _api: HighlighterAPI;
@@ -38,7 +39,7 @@ export class TwitchChatService implements vscode.Disposable {
 
     this.updateChatButtonState();
 
-    const didChangeConfiguration = vscode.workspace.onDidChangeConfiguration((event) => {
+    const didChangeConfiguration = vscode.workspace.onDidChangeConfiguration(event => {
       if (event.affectsConfiguration(`${Configuration.sectionIdentifier}.${Settings.channels}`)) {
         this.config = vscode.workspace.getConfiguration(Configuration.sectionIdentifier);
         this.updateChatButtonState();

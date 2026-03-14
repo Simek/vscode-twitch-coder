@@ -11,10 +11,11 @@ import {
   type WorkspaceConfiguration,
 } from 'vscode';
 
-import { API } from './api/API';
 import CredentialManager from '../credentialManager';
 import { Configuration, LogLevel, SecretKeys, Settings } from '../enums';
 import { type log } from '../logger';
+
+import { API } from './api/API';
 
 type BadgesType = Badges & {
   follower: string;
@@ -87,7 +88,7 @@ export class ChatClient implements Disposable {
             username: login,
             password: accessToken,
           },
-          channels: this.channel.split(', ').map((c) => c.trim()),
+          channels: this.channel.split(', ').map(c => c.trim()),
         };
 
         this.client = Client(opts);
@@ -159,7 +160,7 @@ export class ChatClient implements Disposable {
 
     if (this.requiredBadges.length > 0 && !badges.broadcaster) {
       // Check to ensure the user has a required badge
-      const canContinue = this.requiredBadges.some((badge) => badges[badge] === '1');
+      const canContinue = this.requiredBadges.some(badge => badges[badge] === '1');
       if (!canContinue) {
         this.log(
           LogLevel.Warning,

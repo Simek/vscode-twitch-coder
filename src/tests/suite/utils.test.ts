@@ -1,5 +1,5 @@
-import * as assert from 'node:assert';
 import { suite, test } from 'mocha';
+import * as assert from 'node:assert';
 
 import { parseMessage } from '../../utils';
 

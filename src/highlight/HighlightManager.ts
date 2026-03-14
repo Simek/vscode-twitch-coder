@@ -62,14 +62,12 @@ export class HighlightManager {
     }
 
     this.highlightCollection = serialized
-      .filter((hc) => typeof hc?.fileName === 'string' && Array.isArray(hc.highlights))
-      .map((hc) => {
+      .filter(hc => typeof hc?.fileName === 'string' && Array.isArray(hc.highlights))
+      .map(hc => {
         const fileName = hc.fileName;
         const highlights = hc.highlights
-          .filter(
-            (h) => typeof h?.userName === 'string' && Number.isFinite(h?.startLine) && Number.isFinite(h?.endLine)
-          )
-          .map((h) => {
+          .filter(h => typeof h?.userName === 'string' && Number.isFinite(h?.startLine) && Number.isFinite(h?.endLine))
+          .map(h => {
             const startLine = Math.max(1, Math.trunc(h.startLine));
             const endLine = Math.max(1, Math.trunc(h.endLine));
             const vStartLine = endLine < startLine ? endLine : startLine;
@@ -87,7 +85,7 @@ export class HighlightManager {
     if (this.highlightCollection.length > 0) {
       return this.highlightCollection
         .map(({ fileName, highlights }) => highlights.map(({ startLine }) => `${fileName}: ${startLine}`))
-        .reduce((s) => s)
+        .reduce(s => s)
         .sort((hA, hB) => hB.localeCompare(hA));
     }
     return [];
@@ -95,7 +93,7 @@ export class HighlightManager {
 
   public GetDecorations(fileName: string): DecorationOptions[] {
     const idx = this.highlightCollection.findIndex(
-      (hc) => hc.fileName === fileName || fileName.toLowerCase().endsWith(hc.fileName.toLowerCase())
+      hc => hc.fileName === fileName || fileName.toLowerCase().endsWith(hc.fileName.toLowerCase())
     );
     if (idx !== -1) {
       return this.highlightCollection[idx].highlights.map<DecorationOptions>(({ userName, range, comments }) => {
@@ -118,7 +116,7 @@ export class HighlightManager {
 
     const highlight = new Highlight(userName, range, comments);
 
-    const idx = this.highlightCollection.findIndex((h) =>
+    const idx = this.highlightCollection.findIndex(h =>
       document.fileName.toLowerCase().endsWith(h.fileName.toLowerCase())
     );
     if (idx !== -1) {
@@ -142,7 +140,7 @@ export class HighlightManager {
 
     const highlight = new Highlight(userName, range, comments);
 
-    const idx = this.highlightCollection.findIndex((h) => h.fileName.toLowerCase().endsWith(fileName.toLowerCase()));
+    const idx = this.highlightCollection.findIndex(h => h.fileName.toLowerCase().endsWith(fileName.toLowerCase()));
     if (idx !== -1) {
       if (!this.HighlightExists(idx, userName, startLine, endLine)) {
         this.highlightCollection[idx].highlights.push(highlight);
@@ -172,7 +170,7 @@ export class HighlightManager {
     const idx = this.highlightCollection.findIndex(({ fileName }) => fileName === documentOrFileName);
     if (idx !== -1) {
       const hidx = this.highlightCollection[idx].highlights.findIndex(
-        (h) => (h.userName === userName || userName === 'self') && h.startLine <= lineNumber && h.endLine >= lineNumber
+        h => (h.userName === userName || userName === 'self') && h.startLine <= lineNumber && h.endLine >= lineNumber
       );
       if (hidx !== -1) {
         this.highlightCollection[idx].highlights.splice(hidx, 1);
@@ -191,7 +189,7 @@ export class HighlightManager {
     if (service) {
       this.highlightCollection.forEach(({ highlights, fileName }) => {
         const highlightsToRemove = highlights.filter(({ userName }) => userName.includes(`${service}:`));
-        highlightsToRemove.forEach((h) => {
+        highlightsToRemove.forEach(h => {
           this.Remove(fileName, h.userName, h.startLine, true);
         });
       });
@@ -209,13 +207,13 @@ export class HighlightManager {
   }
 
   public UpdateHighlight(document: TextDocument, valueChanged: TextDocumentContentChangeEvent) {
-    const idx = this.highlightCollection.findIndex((hc) => hc.fileName === document.fileName);
+    const idx = this.highlightCollection.findIndex(hc => hc.fileName === document.fileName);
     let updated = false;
     if (idx !== -1) {
       // A carriage return was removed.
       if (valueChanged.text.length === 0 && valueChanged.range.end.line === valueChanged.range.start.line + 1) {
         let highlights = this.highlightCollection[idx].highlights.filter(
-          (h) => h.range.start.line > valueChanged.range.end.line
+          h => h.range.start.line > valueChanged.range.end.line
         );
         highlights.forEach(({ Update, range }) => {
           Update(
@@ -227,7 +225,7 @@ export class HighlightManager {
           updated = true;
         });
         highlights = this.highlightCollection[idx].highlights.filter(
-          (h) => h.range.end.line >= valueChanged.range.end.line
+          h => h.range.end.line >= valueChanged.range.end.line
         );
         highlights.forEach(({ Update, range }) => {
           Update(
@@ -240,7 +238,7 @@ export class HighlightManager {
         });
       } else if (valueChanged.text.match('\n')) {
         let highlights = this.highlightCollection[idx].highlights.filter(
-          (h) => h.range.end.line >= valueChanged.range.start.line
+          h => h.range.end.line >= valueChanged.range.start.line
         );
         highlights.forEach(({ Update, range }) => {
           Update(
@@ -252,7 +250,7 @@ export class HighlightManager {
           updated = true;
         });
         highlights = this.highlightCollection[idx].highlights.filter(
-          (h) => h.range.start.line > valueChanged.range.start.line
+          h => h.range.start.line > valueChanged.range.start.line
         );
         highlights.forEach(({ Update, range }) => {
           Update(
@@ -300,7 +298,7 @@ export class HighlightManager {
 
   private HighlightExists(idx: number, userName: string, startLine: number, endLine?: number): boolean {
     return this.highlightCollection[idx].highlights.some(
-      (h) => (h.userName === userName || userName === 'self') && h.startLine <= startLine && h.endLine >= endLine!
+      h => (h.userName === userName || userName === 'self') && h.startLine <= startLine && h.endLine >= endLine!
     );
   }
 }

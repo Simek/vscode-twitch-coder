@@ -149,7 +149,7 @@ export class App implements vscode.Disposable {
       return;
     }
     // Determine if the change occurred on a highlighted line, if it did then adjust the highlight.
-    event.contentChanges.forEach((valueChanged) => {
+    event.contentChanges.forEach(valueChanged => {
       this._highlightManager.UpdateHighlight(event.document, valueChanged);
     });
 
@@ -178,7 +178,7 @@ export class App implements vscode.Disposable {
 
   private onDidChangeVisibleTextEditorsHandler(editors: readonly vscode.TextEditor[]): any {
     if (editors.length > 0) {
-      editors.forEach((te) => {
+      editors.forEach(te => {
         te.setDecorations(this.highlightDecorationType, this._highlightManager.GetDecorations(te.document.fileName));
       });
     }
@@ -229,7 +229,7 @@ export class App implements vscode.Disposable {
 
   private refresh(): void {
     this.setEditorHasHighlightsContext();
-    vscode.window.visibleTextEditors.forEach((te) => {
+    vscode.window.visibleTextEditors.forEach(te => {
       te.setDecorations(this.highlightDecorationType, this._highlightManager.GetDecorations(te.document.fileName));
     });
     this._highlightTreeDataProvider.refresh();
@@ -317,8 +317,8 @@ export class App implements vscode.Disposable {
   private async unhighlightHandler(treeItem?: HighlightTreeItem): Promise<void> {
     if (treeItem) {
       const fileName = treeItem.fileName;
-      const highlightLines = treeItem.highlights.map((h) => h.startLine);
-      highlightLines.forEach((line) => {
+      const highlightLines = treeItem.highlights.map(h => h.startLine);
+      highlightLines.forEach(line => {
         this._highlightManager.Remove(fileName, 'self', line, true);
       });
       this._highlightManager.Refresh();
@@ -348,7 +348,7 @@ export class App implements vscode.Disposable {
 
     let pickerOptions: string[] = [];
     const highlights = this._highlightManager.GetHighlightDetails();
-    highlights.forEach((highlight) => {
+    highlights.forEach(highlight => {
       pickerOptions = [...pickerOptions, highlight];
     });
 
@@ -389,7 +389,7 @@ export class App implements vscode.Disposable {
   }
 
   private getTabInputByFileName(fileName: string): vscode.TabInputText | undefined {
-    const matchedTab = this.getAllOpenTabs().find((tab) => {
+    const matchedTab = this.getAllOpenTabs().find(tab => {
       if (tab.input instanceof vscode.TabInputText) {
         return tab.input.uri.fsPath.toLowerCase().endsWith(fileName.toLowerCase());
       }

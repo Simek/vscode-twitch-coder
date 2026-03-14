@@ -1,14 +1,15 @@
+import { randomUUID } from 'node:crypto';
 import { readFile, readFileSync } from 'node:fs';
 import * as http from 'node:http';
 import { join } from 'node:path';
-import { randomUUID } from 'node:crypto';
 import { env, type Event, EventEmitter, extensions, Uri, window } from 'vscode';
 
-import { API } from './api/API';
-import CredentialManager from '../credentialManager';
 import { extensionId } from '../constants';
+import CredentialManager from '../credentialManager';
 import { LogLevel, SecretKeys, TwitchKeys } from '../enums';
 import { type log } from '../logger';
+
+import { API } from './api/API';
 
 export class AuthenticationService {
   private readonly _onAuthStatusChanged: EventEmitter<boolean> = new EventEmitter();

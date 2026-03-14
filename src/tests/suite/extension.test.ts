@@ -1,5 +1,5 @@
-import * as assert from 'node:assert';
 import { setup, suite, test } from 'mocha';
+import * as assert from 'node:assert';
 import * as vscode from 'vscode';
 
 import { extensionId, extSuffix } from '../../constants';
@@ -57,7 +57,7 @@ suite('Extension Tests', function () {
   test('constants.Commands exist in package.json', function () {
     const commandCollection: Command[] = extension.packageJSON.contributes.commands;
     for (let command in Commands) {
-      const result = commandCollection.some((c) => c.command === (Commands as any)[command]);
+      const result = commandCollection.some(c => c.command === (Commands as any)[command]);
       assert.ok(result);
     }
   });
@@ -66,7 +66,7 @@ suite('Extension Tests', function () {
     const config: Configuration = extension.packageJSON.contributes.configuration;
     const properties = Object.keys(config.properties);
     for (let setting in Settings) {
-      const result = properties.some((property) => property === `${extSuffix}.${(Settings as any)[setting]}`);
+      const result = properties.some(property => property === `${extSuffix}.${(Settings as any)[setting]}`);
       assert.ok(result);
     }
   });
@@ -75,9 +75,9 @@ suite('Extension Tests', function () {
     const commandStrings: string[] = extension.packageJSON.contributes.commands.map((c: Command) => c.command);
 
     const allCommands = await vscode.commands.getCommands(true);
-    const commands: string[] = allCommands.filter((c) => c.startsWith(`${extSuffix}.`));
-    commands.forEach((command) => {
-      const result = commandStrings.some((c) => c === command);
+    const commands: string[] = allCommands.filter(c => c.startsWith(`${extSuffix}.`));
+    commands.forEach(command => {
+      const result = commandStrings.some(c => c === command);
       assert.ok(result);
     });
   });
