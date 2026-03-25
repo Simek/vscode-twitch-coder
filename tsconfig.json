@@ -2,10 +2,10 @@
   "compilerOptions": {
     "module": "commonjs",
     "target": "es2024",
-    "outDir": "tests-out",
+    "outDir": "../tests-out",
     "lib": ["es2024"],
     "sourceMap": false,
-    "rootDirs": ["src"],
+    "rootDir": "src",
     "skipLibCheck": true,
     "typeRoots": ["node_modules/@types"],
     "types": ["node", "mocha"],
