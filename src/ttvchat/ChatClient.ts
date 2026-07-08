@@ -36,12 +36,12 @@ export class ChatClient implements Disposable {
 
   private config?: WorkspaceConfiguration;
   private client?: Client;
-  private channel: string = '';
-  private autoConnect: boolean = false;
-  private announceBot: boolean = true;
-  private joinMessage: string = '';
-  private leaveMessage: string = '';
-  private usageTip: string = '';
+  private channel = '';
+  private autoConnect = false;
+  private announceBot = true;
+  private joinMessage = '';
+  private leaveMessage = '';
+  private usageTip = '';
   private requiredBadges: string[] = [];
 
   constructor(private readonly log: log) {}
@@ -66,7 +66,7 @@ export class ChatClient implements Disposable {
     this.requiredBadges = this.config.get<string[]>(Settings.requiredBadges) ?? [];
   }
 
-  public async connect(silent: boolean = false) {
+  public async connect(silent = false) {
     this.updateConfig();
 
     if (this.config && !this.isConnected) {
@@ -106,7 +106,7 @@ export class ChatClient implements Disposable {
     return undefined;
   }
 
-  public async disconnect(silent: boolean = false) {
+  public async disconnect(silent = false) {
     if (this.isConnected) {
       if (!silent && this.announceBot && this.leaveMessage.length > 0) {
         await this.sendMessage(this.leaveMessage);

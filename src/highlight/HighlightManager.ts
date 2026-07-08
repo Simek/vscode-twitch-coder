@@ -161,7 +161,7 @@ export class HighlightManager {
     documentOrFileName: TextDocument | string,
     userName: string,
     lineNumber: number,
-    deferRefresh: boolean = false
+    deferRefresh = false
   ): void {
     if (!(typeof documentOrFileName === 'string')) {
       documentOrFileName = documentOrFileName.fileName;

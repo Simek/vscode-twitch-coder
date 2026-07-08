@@ -1,6 +1,6 @@
 import { type ExtensionContext } from 'vscode';
 
-const PREFIX: string = 'vscode-twitch-coder';
+const PREFIX = 'vscode-twitch-coder';
 
 export default class CredentialManager {
   private static context: ExtensionContext | null = null;
@@ -20,6 +20,6 @@ export default class CredentialManager {
   }
 
   public static async getSecret(key: string): Promise<string | undefined> {
-    return await this.context?.secrets.get(`${PREFIX}.${key}`);
+    return this.context?.secrets.get(`${PREFIX}.${key}`);
   }
 }
